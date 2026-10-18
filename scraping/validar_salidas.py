@@ -5,8 +5,8 @@ from pathlib import Path
 from jsonschema import Draft7Validator
 
 ESQUEMAS = {
-    "triciclos_aceptados.json": "triciclo_aceptado_schema.json",
-    "triciclos_descartados.json": "triciclo_descartado_schema.json",
+    "data/raw/triciclos_aceptados.json": "triciclo_aceptado_schema.json",
+    "scraping/data/triciclos_descartados.json": "triciclo_descartado_schema.json",
 }
 
 def validar_archivo(datos_path: Path, esquema_path: Path) -> bool:
@@ -45,7 +45,7 @@ def validar_archivo(datos_path: Path, esquema_path: Path) -> bool:
         return False
 
 def main():
-    base = Path(__file__).parent
+    base = Path(__file__).resolve().parent.parent
     todo_ok = True
     for datos_nombre, esquema_nombre in ESQUEMAS.items():
         ok = validar_archivo(base / datos_nombre, base / esquema_nombre)

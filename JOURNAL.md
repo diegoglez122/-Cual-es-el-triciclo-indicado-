@@ -202,3 +202,14 @@ Descartados finales: 124, con distribución:
 **Lección:** El perfil persistente de Chrome + display visible resuelve el challenge de Cloudflare donde fallaron `requests`, `curl_cffi` y `nodriver` headless. Los 80 `DESCARGA_FALLIDA` eran challenges cortados, no anuncios perdidos.
 **Artefactos:** `scripts/check_duplicados.py` (movido), `AGENTS.md` (editado), `HANDOFF.md` (reescrito), `JOURNAL.md` (esta entrada).
 **Próximo:** Normalizar datos → aplicar dedup (769→757) → estudio de mercado.
+
+---
+
+## [2026-10-18 · domingo] HANDOFF — Reorganización final de archivos: raíz limpia, `scraping/` y `docs/`
+
+**Contexto:** El usuario pidió limpiar la raíz del proyecto. Una sesión anterior (mismo día, 12:17) ya había creado `data/`, `docs/`, `app/`, `models/` y movido los JSON limpios.
+**Acción:** Crear `scraping/` con 12 scripts de scraping/pipeline y `scraping/data/` con 217 artefactos crudos (90 raw HTML + 90 states —integrados los p31–60 de `_p31_60_hold/`, ya eliminada—, caché, backups, snapshots). Borrar `google-chrome.deb` (143 MB) y `main`. Mover `informe_mercado.md` a `docs/`. Ajustar rutas en 10 scripts con backup previo en `scraping/data/*.bak.20261018_123614`. Actualizar `.gitignore` (añadidos `*.html`, `cache_*.json`, `*_state_*.json`, `scraping/data/`, `basura/`), `AGENTS.md` y `HANDOFF.md`.
+**Resultado:** Raíz limpia. `py_compile` OK; `validar_salidas.py` valida 769 aceptados + 609 descartados; `normalizar.py` encuentra los 90 states; `drivers_precio.INFORME` apunta a `docs/informe_mercado.md`. Renombres staged en git, sin commitear.
+**Lección:** Mover scripts con rutas relativas exige ajustar TODOS los consumidores de los datos que mueven; el glob vacío de `normalizar.py` habría producido un dedup silenciosamente vacío.
+**Artefactos:** `scraping/` (nuevo), `scraping/data/` (nuevo), `basura/` descartada, `google-chrome.deb` + `main` borrados, `.gitignore`, `AGENTS.md`, `HANDOFF.md`, 10 scripts editados + sus `.bak.20261018_123614`.
+**Próximo:** Continuar normalización/estudio de mercado; decidir cuándo commitear la reorganización.

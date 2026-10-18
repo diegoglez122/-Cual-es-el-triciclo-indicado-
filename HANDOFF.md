@@ -1,9 +1,9 @@
 # HANDOFF — Revolico Triciclos
 
 **Asignación del proyecto (clase):** sábado 2026-09-26
-**Última actualización:** sábado 2026-10-17
+**Última actualización:** domingo 2026-10-18
 **Responsable:** diegogonza
-**Estado general:** Scraping COMPLETADO. Meta superada. Fase de normalización + estudio de mercado.
+**Estado general:** Scraping COMPLETADO. Meta superada. Fase de normalización + estudio de mercado. Reorganización de archivos COMPLETADA.
 
 ---
 
@@ -11,8 +11,8 @@
 
 Extraer anuncios de **triciclos** de Revolico.com (Vehículos > Motos Eléctricas y Triciclos), aplicar 7 filtros estrictos y generar:
 
-- `triciclos_aceptados.json` — cumplen TODOS los filtros.
-- `triciclos_descartados.json` — rechazados, con motivo y datos crudos.
+- `data/raw/triciclos_aceptados.json` — cumplen TODOS los filtros.
+- `scraping/data/triciclos_descartados.json` — rechazados, con motivo y datos crudos.
 
 **Meta original:** 500 aceptados → **SUPERADA** (769).
 **Decisión del usuario (2026-10-17):** parar el scraping. p91–253 NO se harán.
@@ -22,8 +22,8 @@ Extraer anuncios de **triciclos** de Revolico.com (Vehículos > Motos Eléctrica
 
 ## 2. Estado actual
 
-- **Páginas scrapeadas:** p1–p90 (de 253 reales). p31–60 en `_p31_60_hold/` temporalmente.
-- **Permalinks únicos:** 1378. **Caché:** 1298 descripciones en `cache_descripciones.json`.
+- **Páginas scrapeadas:** p1–p90 (de 253 reales). Los 90 states + 90 raw están integrados en `scraping/data/` (los p31–60 venían de `_p31_60_hold/`, ya eliminada).
+- **Permalinks únicos:** 1378. **Caché:** 1298 descripciones en `scraping/data/cache_descripciones.json`.
 - **Pipeline:** 1378 procesados → **769 aceptados**, **609 descartados**.
 - **Descartes por motivo:**
   - `AUTONOMIA_NO_INDICADA`: 397
@@ -32,30 +32,32 @@ Extraer anuncios de **triciclos** de Revolico.com (Vehículos > Motos Eléctrica
   - `DESCARGA_FALLIDA`: 80 (challenge Cloudflare cortado, no anuncios reales perdidos)
   - `PRECIO_INVALIDO`: 71
   - `MONEDA_NO_DETECTADA`: 71
-- **Duplicados detectados** (por `(gcsKey, phone)`): 12 grupos / 24 registros.
-  - **DECISIÓN:** aplicar dedup → bajaría a **757 aceptados**. Aún NO aplicado.
+- **Duplicados detectados** (por `(gcsKey, phone)`): 12 grupos / 24 registros → **757 tras dedup** (ya aplicado en `data/processed/triciclos_aceptados_normalizado.json`; `data/processed/duplicados_descartados.json` registra los descartes).
 - Cloudflare resuelto con perfil persistente `chrome_profile_revolico/` + `DISPLAY=:0` + Chrome real.
+- **Reorganización (2026-10-18):** raíz limpia; scripts de scraping en `scraping/`, crudos y backups en `scraping/data/`, informe en `docs/`, datos limpios en `data/`. Rutas de los scripts ajustadas (backups en `scraping/data/*.bak.20261018_123614`).
 
 ---
 
 ## 3. Estado por categoría
 
 ### Estable
-- `pipeline.py` con 7 filtros (versión 2026-10-17, respaldada en `.bak.20261017_194105`).
+- `scraping/pipeline.py` con 7 filtros (respaldado en `scraping/data/pipeline.py.bak.20261018_123614` y versiones anteriores).
 - Esquemas JSON (`triciclo_aceptado_schema.json`, `triciclo_descartado_schema.json`).
-- Validación con `validar_salidas.py`.
-- Caché incremental `cache_descripciones.json` (1298 entradas, respaldada como `cache_descripciones.1298.json`).
+- Validación con `scraping/validar_salidas.py` (aceptados en `data/raw/`, descartados en `scraping/data/`).
+- Caché incremental `scraping/data/cache_descripciones.json` (1298 entradas, snapshot `cache_descripciones.1298.json`).
 - Chrome + perfil persistente funcionando contra Cloudflare.
+- `scripts/normalizar.py` apunta a `scraping/data/revolico_state_p*.json` para el índice de dedup.
+- `scripts/analisis_mercado.py` escribe el informe en `docs/informe_mercado.md` (`drivers_precio.py` lo importa).
 
 ### Completado
-- Scraping p1–p90. Meta 500 superada (769).
+- Scraping p1–p90. Meta 500 superada (769 → 757 con dedup).
 - Detección de duplicados con `scripts/check_duplicados.py`.
+- Reorganización de archivos (raíz limpia, `scraping/`, `docs/`).
 
 ### En progreso / pendiente
-- Aplicar dedup (769 → 757).
 - Normalización de datos (monedas, precios a valores comparables, ubicaciones, marcas).
 - Estudio de mercado (distribución por provincia, marca, tipo, rango de precios).
-- Limpieza de artefactos temporales (`.html`, `test_*`, `_p31_60_hold/`, `.bak*`).
+- Decidir si se commitea la reorganización (git tiene los renombres staged + cambios de la sesión anterior sin commitear).
 
 ---
 
@@ -67,17 +69,17 @@ Extraer anuncios de **triciclos** de Revolico.com (Vehículos > Motos Eléctrica
 
 ## 5. Próximos pasos ordenados
 
-1. **Normalización** de `triciclos_aceptados.json`:
+1. **Normalización** de `data/raw/triciclos_aceptados.json` (continuar en `scripts/normalizar.py`):
    - Unificar monedas (CUP/USD/MLC/MN) y calcular equivalente de referencia.
    - Normalizar marcas (variantes de escritura → nombre canónico).
    - Normalizar ubicaciones (provincia/municipio).
    - Validar tipos: eléctrico / combustible / híbrido.
-2. **Dedup** por `(gcsKey, phone)`: 12 grupos / 24 registros → esperado **757 aceptados**. Respaldar antes.
-3. **Estudio de mercado**:
+2. **Estudio de mercado** (continuar en `scripts/analisis_mercado.py` + `scripts/drivers_precio.py`):
    - Distribución por provincia, marca, tipo de triciclo.
    - Rango y mediana de precios (por moneda y equivalente).
    - Autonomías declaradas.
-   - Informe final (markdown + tablas).
+   - Informe final (markdown + tablas) en `docs/informe_mercado.md`.
+3. **Commit** de la reorganización cuando el usuario lo pida.
 
 ---
 
@@ -86,25 +88,30 @@ Extraer anuncios de **triciclos** de Revolico.com (Vehículos > Motos Eléctrica
 ```bash
 cd ~/proyectos/revolico-triciclos
 source venv/bin/activate
-python pipeline.py
-python validar_salidas.py
+python scraping/pipeline.py          # desde la raíz (rutas relativas al CWD)
+python scraping/validar_salidas.py
 python scripts/check_duplicados.py   # desde la raíz (usa rutas relativas)
+python scripts/normalizar.py         # anclado vía __file__
+python scripts/analisis_mercado.py   # escribe docs/informe_mercado.md
 ```
 
 ---
 
 ## 7. Archivos clave
 
-- `pipeline.py` — script principal del pipeline de filtros.
-- `cache_descripciones.json` — 1298 descripciones cacheadas. **No borrar.**
-- `triciclos_aceptados.json` — 769 aceptados (antes de dedup).
-- `triciclos_descartados.json` — 609 descartados.
-- `triciclos_aceptados.769.json` — snapshot del conteo post-pipeline.
-- `scripts/check_duplicados.py` — chequeo de duplicados (solo lectura).
+- `scraping/pipeline.py` — script principal del pipeline de filtros.
+- `scraping/data/cache_descripciones.json` — 1298 descripciones cacheadas. **No borrar.**
+- `data/raw/triciclos_aceptados.json` — 769 aceptados (entrada de la normalización).
+- `scraping/data/triciclos_descartados.json` — 609 descartados.
+- `scraping/data/triciclos_aceptados.769.json` — snapshot del conteo post-pipeline.
+- `data/processed/triciclos_aceptados_normalizado.json` — 757 aceptados (post-dedup).
+- `data/processed/duplicados_descartados.json` — 24 duplicados descartados.
+- `docs/informe_mercado.md` — informe de mercado.
+- `scripts/check_duplicados.py`, `scripts/normalizar.py`, `scripts/analisis_mercado.py`, `scripts/drivers_precio.py` — análisis e informe.
 - `chrome_profile_revolico/` — perfil persistente que resuelve Cloudflare.
-- `scraper_revolico_nodriver.py`, `prefetch_descripciones_nodriver.py` — scraping con Chrome real.
-- `revolico_raw_p1-p90.html`, `revolico_state_p1-p90.json` — datos crudos (faltan p32–60 en raíz; están en `_p31_60_hold/`).
-- `pipeline.py.bak*`, `triciclos_aceptados.bak*.json`, `triciclos_descartados.bak*.json` — backups.
+- `scraping/scraper_revolico_nodriver.py`, `scraping/prefetch_descripciones_nodriver.py` — scraping con Chrome real.
+- `scraping/data/revolico_raw_p1-p90.html`, `scraping/data/revolico_state_p1-p90.json` — datos crudos (p1–p90 completos).
+- `scraping/data/*.bak*` — todos los backups históricos (incl. `pipeline.py.bak*`, `*.bak.20261018_123614`).
 - `JOURNAL.md`, `HANDOFF.md`, `AGENTS.md` — documentación del proyecto.
 
 ---
@@ -113,13 +120,12 @@ python scripts/check_duplicados.py   # desde la raíz (usa rutas relativas)
 
 - No reanudar el scraping de p91 en adelante sin petición explícita del usuario.
 - No ejecutar `python - << 'EOF'` con scripts largos dentro de opencode (se cuelga).
-- No modificar `pipeline.py` mientras corre; si se toca, crear `.bakN` antes.
-- No hacer `git add` de `venv/`, `cache_descripciones.json`, `revolico_state_*.json`, `revolico_raw_*.html` ni los JSON de salida.
-- No borrar `cache_descripciones.json`.
-- No borrar `_p31_60_hold/` hasta confirmar que p31–60 están integrados en raíz.
+- No modificar `scraping/pipeline.py` mientras corre; si se toca, crear `.bakN` en `scraping/data/` antes.
+- No hacer `git add` de `venv/`, `scraping/data/` ni los JSON de salida (`data/raw/`, `data/processed/`).
+- No borrar `scraping/data/cache_descripciones.json`.
 - No tocar las motos: el trabajo es SOLO sobre triciclos.
 - No bajar `PAUSA` por debajo de 3s si se retoma scraping.
-- No mover a `scripts/` los scripts que usan rutas relativas a la raíz (`pipeline.py`, `scraper_*.py`, `prefetch_*.py`, `test_*.py`, `validar_salidas.py`).
+- Los scripts de `scraping/` usan rutas relativas al CWD: ejecutarlos SIEMPRE desde la raíz del proyecto.
 - `scripts/check_duplicados.py` usa ruta relativa: ejecutar SIEMPRE desde la raíz.
 
 ---
@@ -136,4 +142,5 @@ python scripts/check_duplicados.py   # desde la raíz (usa rutas relativas)
 | 2026-10-06 14:11 | crisp-mountain | revolico-triciclos | Discusión de agentes |
 | 2026-10-06 14:25 | witty-comet | revolico-triciclos | Scraping a JSON |
 | 2026-10-06 14:25 | brave-planet | revolico-triciclos | Scrape 2 páginas (subagente) |
-| 2026-10-17 | (esta sesión) | revolico-triciclos | Scraping p61-90 + pipeline 769 + reorganización scripts/ |
+| 2026-10-17 | (sesión anterior) | revolico-triciclos | Scraping p61-90 + pipeline 769 + reorganización scripts/ |
+| 2026-10-18 | (esta sesión) | revolico-triciclos | Reorganización final: scraping/, docs/, raíz limpia + ajuste de rutas |

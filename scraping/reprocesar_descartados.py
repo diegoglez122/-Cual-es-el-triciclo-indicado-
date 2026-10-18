@@ -19,7 +19,7 @@ HEADERS = {
     "Accept-Language": "es-ES,es;q=0.9"
 }
 BASE_URL = "https://www.revolico.com"
-CACHE_FILE = "cache_descripciones.json"
+CACHE_FILE = "scraping/data/cache_descripciones.json"
 
 def limpiar_texto(t):
     """Normaliza el texto: quita caracteres invisibles, normaliza espacios."""
@@ -151,9 +151,9 @@ def evaluar(datos, titulo, descripcion):
 
 def main():
     # Cargar aceptados actuales
-    with open('triciclos_aceptados.json', encoding='utf-8') as f:
+    with open('data/raw/triciclos_aceptados.json', encoding='utf-8') as f:
         aceptados = json.load(f)
-    with open('triciclos_descartados.json', encoding='utf-8') as f:
+    with open('scraping/data/triciclos_descartados.json', encoding='utf-8') as f:
         descartados = json.load(f)
     
     print(f"📂 Estado inicial:")
@@ -199,9 +199,9 @@ def main():
     
     # Guardar todo
     aceptados_final = aceptados + nuevos_aceptados
-    with open('triciclos_aceptados.json', 'w', encoding='utf-8') as f:
+    with open('data/raw/triciclos_aceptados.json', 'w', encoding='utf-8') as f:
         json.dump(aceptados_final, f, ensure_ascii=False, indent=2)
-    with open('triciclos_descartados.json', 'w', encoding='utf-8') as f:
+    with open('scraping/data/triciclos_descartados.json', 'w', encoding='utf-8') as f:
         json.dump(siguen_descartados, f, ensure_ascii=False, indent=2)
     
     from collections import Counter

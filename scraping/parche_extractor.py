@@ -8,7 +8,7 @@ import re
 import os
 from collections import Counter
 
-CACHE_FILE = "cache_descripciones.json"
+CACHE_FILE = "scraping/data/cache_descripciones.json"
 
 def limpiar_texto(t):
     if not t: return ""
@@ -104,9 +104,9 @@ def main():
         cache = json.load(f)
     print(f"📂 Caché cargada: {len(cache)} descripciones\n")
     
-    with open('triciclos_aceptados.json', encoding='utf-8') as f:
+    with open('data/raw/triciclos_aceptados.json', encoding='utf-8') as f:
         aceptados = json.load(f)
-    with open('triciclos_descartados.json', encoding='utf-8') as f:
+    with open('scraping/data/triciclos_descartados.json', encoding='utf-8') as f:
         descartados = json.load(f)
     
     print(f"Estado inicial: {len(aceptados)} aceptados, {len(descartados)} descartados\n")
@@ -133,9 +133,9 @@ def main():
             print(f"[{i}] ✅ RECUPERADO: {d['titulo_crudo'][:60]}")
     
     aceptados_final = aceptados + nuevos
-    with open('triciclos_aceptados.json', 'w', encoding='utf-8') as f:
+    with open('data/raw/triciclos_aceptados.json', 'w', encoding='utf-8') as f:
         json.dump(aceptados_final, f, ensure_ascii=False, indent=2)
-    with open('triciclos_descartados.json', 'w', encoding='utf-8') as f:
+    with open('scraping/data/triciclos_descartados.json', 'w', encoding='utf-8') as f:
         json.dump(siguen, f, ensure_ascii=False, indent=2)
     
     print(f"\n{'='*50}\n📊 RESULTADO FINAL\n{'='*50}")

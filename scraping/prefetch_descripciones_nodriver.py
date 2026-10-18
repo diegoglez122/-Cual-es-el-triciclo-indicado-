@@ -9,7 +9,7 @@ import nodriver as uc
 from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.revolico.com"
-CACHE_FILE = "cache_descripciones.json"
+CACHE_FILE = "scraping/data/cache_descripciones.json"
 PROFILE_DIR = "./chrome_profile_revolico"
 GUARDAR_CADA = 10
 SLEEP_ENTRE = 6
@@ -32,7 +32,7 @@ def extraer_ads(d):
 
 def recolectar_permalinks():
     permalinks = set()
-    for path in sorted(glob.glob('revolico_state_p*.json')):
+    for path in sorted(glob.glob('scraping/data/revolico_state_p*.json')):
         with open(path, encoding='utf-8') as f:
             d = json.load(f)
         for ad in extraer_ads(d):

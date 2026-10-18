@@ -31,7 +31,7 @@ async def obtener_datos(browser, pagina):
         else:
             print(f"  ❌ challenge no resuelto tras {MAX_INTENTOS} intentos")
 
-        with open(f"revolico_raw_p{pagina}.html", "w", encoding="utf-8") as f:
+        with open(f"scraping/data/revolico_raw_p{pagina}.html", "w", encoding="utf-8") as f:
             f.write(html)
 
         soup = BeautifulSoup(html, "html.parser")
@@ -41,9 +41,9 @@ async def obtener_datos(browser, pagina):
             return None
 
         data = json.loads(script.string)
-        with open(f"revolico_state_p{pagina}.json", "w", encoding="utf-8") as f:
+        with open(f"scraping/data/revolico_state_p{pagina}.json", "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
-        print(f"  💾 revolico_state_p{pagina}.json")
+        print(f"  💾 scraping/data/revolico_state_p{pagina}.json")
         return data
 
     except Exception as e:

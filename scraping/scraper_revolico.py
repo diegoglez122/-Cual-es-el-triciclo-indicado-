@@ -27,7 +27,7 @@ def obtener_datos(pagina):
         r = requests.get(url, headers=HEADERS, timeout=30)
         print(f"  → Status: {r.status_code}, Tamaño: {len(r.text)} caracteres")
 
-        with open(f"revolico_raw_p{pagina}.html", "w", encoding="utf-8") as f:
+        with open(f"scraping/data/revolico_raw_p{pagina}.html", "w", encoding="utf-8") as f:
             f.write(r.text)
 
         soup = BeautifulSoup(r.text, "html.parser")
@@ -40,10 +40,10 @@ def obtener_datos(pagina):
         data = json.loads(script.string)
         print("  ✅ JSON interno extraído correctamente")
 
-        with open(f"revolico_state_p{pagina}.json", "w", encoding="utf-8") as f:
+        with open(f"scraping/data/revolico_state_p{pagina}.json", "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-        print(f"  💾 Guardado en revolico_state_p{pagina}.json")
+        print(f"  💾 Guardado en scraping/data/revolico_state_p{pagina}.json")
         return data
 
     except Exception as e:

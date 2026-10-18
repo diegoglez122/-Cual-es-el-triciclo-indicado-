@@ -3,7 +3,7 @@
 import json
 from collections import defaultdict
 
-ACEPT = 'triciclos_aceptados.json'
+ACEPT = 'data/raw/triciclos_aceptados.json'
 aceptados = json.load(open(ACEPT))
 print(f'Total aceptados: {len(aceptados)}\n')
 

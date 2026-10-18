@@ -24,7 +24,7 @@ HEADERS = {
     "Accept-Language": "es-ES,es;q=0.9"
 }
 BASE_URL = "https://www.revolico.com"
-CACHE_FILE = "cache_descripciones.json"
+CACHE_FILE = "scraping/data/cache_descripciones.json"
 PAUSA = 3
 
 MARCAS_CONOCIDAS = [
@@ -259,12 +259,12 @@ def evaluar(ad_busqueda, detalle, provincias, municipios):
 def main():
     print("📂 Cargando archivos de estado...")
     datas = []
-    for path in sorted(glob.glob('revolico_state_p*.json')):
+    for path in sorted(glob.glob('scraping/data/revolico_state_p*.json')):
         with open(path, encoding='utf-8') as f:
             datas.append(json.load(f))
         print(f"  → {path}")
     if not datas:
-        print("❌ No hay revolico_state_p*.json")
+        print("❌ No hay scraping/data/revolico_state_p*.json")
         return
 
     ads_raw = []
@@ -316,9 +316,9 @@ def main():
         if not vino_de_cache:
             time.sleep(PAUSA)
 
-    with open('triciclos_aceptados.json', 'w', encoding='utf-8') as f:
+    with open('data/raw/triciclos_aceptados.json', 'w', encoding='utf-8') as f:
         json.dump(aceptados, f, ensure_ascii=False, indent=2)
-    with open('triciclos_descartados.json', 'w', encoding='utf-8') as f:
+    with open('scraping/data/triciclos_descartados.json', 'w', encoding='utf-8') as f:
         json.dump(descartados, f, ensure_ascii=False, indent=2)
 
     print(f"\n{'='*50}\n📊 RESUMEN\n{'='*50}")

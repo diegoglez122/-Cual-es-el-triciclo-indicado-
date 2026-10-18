@@ -14,9 +14,9 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-ACEPTADOS = ROOT / 'triciclos_aceptados.json'
-SALIDA = ROOT / 'triciclos_aceptados_normalizado.json'
-DESCARTES = ROOT / 'duplicados_descartados.json'
+ACEPTADOS = ROOT / 'data' / 'raw' / 'triciclos_aceptados.json'
+SALIDA = ROOT / 'data' / 'processed' / 'triciclos_aceptados_normalizado.json'
+DESCARTES = ROOT / 'data' / 'processed' / 'duplicados_descartados.json'
 
 # --- Mapeo de marcas: variante -> canónica. Clave en minúsculas sin espacios extra ---
 MAPEO_MARCAS = {
@@ -112,7 +112,7 @@ def normalizar_autonomia(valor):
 def cargar_indice_estado():
     """indice[clave_enlace] = {'gcsKey':..., 'phone':...} desde revolico_state_p*.json."""
     indice = {}
-    for path in sorted(ROOT.glob('revolico_state_p*.json')):
+    for path in sorted(ROOT.glob('scraping/data/revolico_state_p*.json')):
         try:
             with open(path, encoding='utf-8') as f:
                 data = json.load(f)

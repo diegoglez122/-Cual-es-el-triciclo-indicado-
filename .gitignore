@@ -23,10 +23,15 @@ __pycache__/
 *.tmp
 *~
 
+# ===== HTML crudos y masivos (regenerables) =====
+*.html
+
 # ===== Datos crudos del scraping (regenerables) =====
+scraping/data/
 revolico_raw_p*.html
 revolico_state_p*.json
-cache_descripciones.json
+*_state_*.json
+cache_*.json
 
 # ===== Sistema =====
 .DS_Store
@@ -36,9 +41,11 @@ Thumbs.db
 .env
 .env.*
 !.env.example
-# ===== Scraping: Perfiles de Chrome y basura del navegador =====
+
+# ===== Scraping: perfiles de Chrome, instaladores y basura =====
 chrome_profile_*/
 *.deb
+basura/
 main
 
 # ===== Archivos de prueba (imágenes y html generados) =====

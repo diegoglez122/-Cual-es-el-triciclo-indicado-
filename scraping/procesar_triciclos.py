@@ -226,9 +226,9 @@ def procesar_anuncio(ad_busqueda, provincias, municipios):
 
 def main():
     print("📂 Leyendo JSON de búsqueda...")
-    with open('revolico_state_p1.json', encoding='utf-8') as f:
+    with open('scraping/data/revolico_state_p1.json', encoding='utf-8') as f:
         d1 = json.load(f)
-    with open('revolico_state_p2.json', encoding='utf-8') as f:
+    with open('scraping/data/revolico_state_p2.json', encoding='utf-8') as f:
         d2 = json.load(f)
 
     ads = extraer_ads(d1) + extraer_ads(d2)
@@ -259,9 +259,9 @@ def main():
         time.sleep(2)
 
     print(f"\n💾 Escribiendo archivos...")
-    with open('triciclos_aceptados.json', 'w', encoding='utf-8') as f:
+    with open('data/raw/triciclos_aceptados.json', 'w', encoding='utf-8') as f:
         json.dump(aceptados, f, ensure_ascii=False, indent=2)
-    with open('triciclos_descartados.json', 'w', encoding='utf-8') as f:
+    with open('scraping/data/triciclos_descartados.json', 'w', encoding='utf-8') as f:
         json.dump(descartados, f, ensure_ascii=False, indent=2)
 
     # Reporte

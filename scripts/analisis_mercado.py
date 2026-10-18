@@ -23,8 +23,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parent.parent
-ENTRADA = ROOT / 'triciclos_aceptados_normalizado.json'
-INFORME = ROOT / 'informe_mercado.md'
+ENTRADA = ROOT / 'data' / 'processed' / 'triciclos_aceptados_normalizado.json'
+INFORME = ROOT / 'docs' / 'informe_mercado.md'
 GRAFICOS = ROOT / 'graficos'
 
 ACEPTADOS_HISTORICOS = 769

@@ -6,8 +6,8 @@ Este archivo es la guía principal para opencode dentro de este proyecto. Define
 
 **Fase 1 (COMPLETADA, 2026-10-17):** Extraer anuncios de triciclos publicados en la subcategoría de Vehículos > Motos Eléctricas y Triciclos de Revolico.com, aplicar filtros estrictos de calidad y generar dos archivos JSON:
 
-- `triciclos_aceptados.json` — anuncios que cumplen TODOS los criterios.
-- `triciclos_descartados.json` — anuncios rechazados con el motivo del descarte.
+- `data/raw/triciclos_aceptados.json` — anuncios que cumplen TODOS los criterios.
+- `scraping/data/triciclos_descartados.json` — anuncios rechazados con el motivo del descarte.
 
 El scraping terminó: se scrapeó p1–p90 (p91–253 descartados por decisión del usuario). La meta de 500 aceptados se superó con creces: **769 aceptados, 609 descartados**. Quedan identificados 12 grupos de duplicados (24 registros) que bajarán el total a **757** tras aplicar dedup.
 
@@ -17,23 +17,44 @@ El scraping terminó: se scrapeó p1–p90 (p91–253 descartados por decisión 
 
 ```
 revolico-triciclos/
-├── .opencode/
-│   └── agents/
-│       └── revolico-triciclos.md
-├── scripts/
-│   └── check_duplicados.py
+├── .opencode/agents/revolico-triciclos.md
+├── scraping/                  # scripts de scraping y pipeline
+│   ├── pipeline.py
+│   ├── scraper_revolico.py
+│   ├── scraper_revolico_nodriver.py
+│   ├── prefetch_descripciones_nodriver.py
+│   ├── procesar_triciclos.py
+│   ├── reprocesar_descartados.py
+│   ├── parche_extractor.py
+│   ├── validar_salidas.py
+│   ├── test_*.py
+│   └── data/                  # datos crudos, temporales y backups (ignorado por git)
+│       ├── revolico_raw_p1..p90.html
+│       ├── revolico_state_p1..p90.json
+│       ├── cache_descripciones.json
+│       ├── triciclos_descartados.json
+│       └── *.bak* / snapshots
+├── scripts/                   # análisis, normalización e informe (rutas ancladas a la raíz)
+│   ├── analisis_mercado.py
+│   ├── check_duplicados.py
+│   ├── drivers_precio.py
+│   ├── normalizar.py
+│   └── ...
+├── data/                      # datos limpios de la Fase 2
+│   ├── raw/triciclos_aceptados.json
+│   └── processed/triciclos_aceptados_normalizado.json, duplicados_descartados.json, encuestas.json
+├── docs/informe_mercado.md
+├── graficos/                  # PNG generados por el análisis
 ├── venv/
 ├── AGENTS.md
-├── README_SCRAPING_REVOLICO_OPENCODE.md
-├── revolico_triciclos_agent.py
-├── validar_salidas.py
+├── HANDOFF.md
+├── JOURNAL.md
+├── requirements.txt
 ├── triciclo_aceptado_schema.json
-├── triciclo_descartado_schema.json
-├── triciclos_aceptados.json
-└── triciclos_descartados.json
+└── triciclo_descartado_schema.json
 ```
 
-Los scripts de análisis, normalización e informe viven en `scripts/`. Los scripts de scraping y pipeline viven en la raíz porque leen y escriben JSON en el directorio de trabajo; moverlos rompería sus rutas relativas.
+Los scripts de scraping y pipeline (`scraping/`) usan rutas relativas al directorio de trabajo: ejecútalos SIEMPRE desde la raíz del proyecto (ej. `python scraping/pipeline.py`). Los scripts de `scripts/` se anclan solos vía `Path(__file__).parent.parent`, pero también se ejecutan desde la raíz por convención.
 
 ## Entorno Python
 
@@ -80,7 +101,7 @@ Cómo invocarlo:
 
 Cuándo NO delegar:
 
-- Tareas de validación de JSON → hacerlas directamente con `validar_salidas.py`.
+- Tareas de validación de JSON → hacerlas directamente con `scraping/validar_salidas.py`.
 - Edición de esquemas o del README → hacerlas directamente.
 - Consultas generales → responder directamente.
 
@@ -110,11 +131,11 @@ Adicionales (opcionales):
 
 ## Salidas esperadas
 
-### triciclos_aceptados.json
+### data/raw/triciclos_aceptados.json
 
 Array de objetos que cumplen los 7 criterios. Validable con `triciclo_aceptado_schema.json`.
 
-### triciclos_descartados.json
+### scraping/data/triciclos_descartados.json
 
 Array de objetos con esta estructura:
 
@@ -146,7 +167,7 @@ Validable con `triciclo_descartado_schema.json`.
 3. Validar las salidas:
 
    ```bash
-   python validar_salidas.py
+   python scraping/validar_salidas.py
    ```
 
 4. Revisar el reporte que imprime el agente (aceptados, descartados y conteo por criterio).
@@ -159,9 +180,12 @@ Validable con `triciclo_descartado_schema.json`.
 |---|---|
 | Activar entorno | `source venv/bin/activate` |
 | Desactivar entorno | `deactivate` |
-| Ejecutar scraping standalone | `python revolico_triciclos_agent.py` |
-| Validar JSON generados | `python validar_salidas.py` |
+| Ejecutar pipeline de filtros (desde raíz) | `python scraping/pipeline.py` |
+| Scraping con Chrome real (desde raíz) | `PAG_INI=91 PAG_FIN=95 python scraping/scraper_revolico_nodriver.py` |
+| Validar JSON generados | `python scraping/validar_salidas.py` |
 | Comprobar duplicados (desde raíz) | `python scripts/check_duplicados.py` |
+| Normalizar datos (desde raíz) | `python scripts/normalizar.py` |
+| Generar informe de mercado | `python scripts/analisis_mercado.py` |
 | Listar agentes disponibles en opencode | `/agents` |
 | Ver esquema de aceptados | `cat triciclo_aceptado_schema.json` |
 | Ver esquema de descartados | `cat triciclo_descartado_schema.json` |
