@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anuncio de Triciclo Descartado",
+  "type": "object",
+  "properties": {
+    "enlace": {
+      "type": "string",
+      "format": "uri"
+    },
+    "titulo_crudo": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "motivos_descarte": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "PRECIO_INVALIDO",
+          "TIPO_NO_DETERMINADO",
+          "MARCA_NO_DETECTADA",
+          "UBICACION_VACIA",
+          "FECHA_FUERA_DE_2026",
+          "AUTONOMIA_NO_INDICADA",
+          "MONEDA_NO_DETECTADA",
+          "DESCARGA_FALLIDA"
+        ]
+      }
+    },
+    "datos_crudos": {
+      "type": "object",
+      "properties": {
+        "precio_publicado": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tipo_triciclo": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "eléctrico",
+            "combustible",
+            "híbrido",
+            null
+          ]
+        },
+        "marca_detectada": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ubicacion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fecha_publicacion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "autonomia_km": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "moneda_original": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "USD",
+            "CUP",
+            "MN",
+            "EUR",
+            "MLC",
+            null
+          ]
+        },
+        "municipio": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tipo_uso": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "carga",
+            "pasajeros",
+            "mixto",
+            "personal",
+            "comercial",
+            null
+          ]
+        },
+        "garantia_meses": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "panel_incluido": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "voltaje_bateria": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9]+V$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "precio_publicado",
+        "tipo_triciclo",
+        "marca_detectada",
+        "ubicacion",
+        "fecha_publicacion",
+        "autonomia_km",
+        "moneda_original"
+      ]
+    }
+  },
+  "required": [
+    "enlace",
+    "motivos_descarte",
+    "datos_crudos"
+  ],
+  "additionalProperties": false
+}

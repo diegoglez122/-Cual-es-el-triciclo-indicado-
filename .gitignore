@@ -1,0 +1,52 @@
+# ===== Entornos virtuales =====
+venv/
+.venv/
+env/
+ENV/
+
+# ===== Node / opencode =====
+node_modules/
+.opencode/node_modules/
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# ===== Backups y temporales =====
+*.bak*
+*.save
+*.log
+*.tmp
+*~
+
+# ===== Datos crudos del scraping (regenerables) =====
+revolico_raw_p*.html
+revolico_state_p*.json
+cache_descripciones.json
+
+# ===== Sistema =====
+.DS_Store
+Thumbs.db
+
+# ===== Entorno =====
+.env
+.env.*
+!.env.example
+# ===== Scraping: Perfiles de Chrome y basura del navegador =====
+chrome_profile_*/
+*.deb
+main
+
+# ===== Archivos de prueba (imágenes y html generados) =====
+test_*.html
+test_*.png
+test_*.py
+
+# ===== JSONs temporales o de versiones viejas =====
+duplicados_descartados.json
+triciclos_aceptados.*.json
+triciclos_descartados.*.json

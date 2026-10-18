@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anuncio de Triciclo Aceptado",
+  "type": "object",
+  "properties": {
+    "precio_publicado": { "type": "number", "exclusiveMinimum": 0 },
+    "tipo_triciclo": { "type": "string", "enum": ["eléctrico", "combustible", "híbrido"] },
+    "marca_detectada": { "type": "string", "minLength": 1, "not": { "enum": ["Desconocida", "desconocida", ""] } },
+    "ubicacion": { "type": "string", "minLength": 1 },
+    "fecha_publicacion": { "type": "string", "format": "date", "pattern": "^2026-" },
+    "autonomia_km": { "type": "number", "exclusiveMinimum": 0 },
+    "moneda_original": { "type": "string", "enum": ["USD", "CUP", "MN", "EUR", "MLC"] },
+    "municipio": { "type": ["string", "null"] },
+    "tipo_uso": { "type": ["string", "null"], "enum": ["carga", "pasajeros", "mixto", "personal", "comercial", null] },
+    "garantia_meses": { "type": ["integer", "null"], "minimum": 0 },
+    "panel_incluido": { "type": ["boolean", "null"] },
+    "voltaje_bateria": { "type": ["string", "null"], "pattern": "^[0-9]+V$" },
+    "enlace": { "type": "string", "format": "uri" }
+  },
+  "required": ["precio_publicado", "tipo_triciclo", "marca_detectada", "ubicacion", "fecha_publicacion", "autonomia_km", "moneda_original", "enlace"],
+  "additionalProperties": false
+}
