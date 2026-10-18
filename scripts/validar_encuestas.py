@@ -60,7 +60,7 @@ def cargar_marcas_revolico():
     except Exception:
         return None
     items = d if isinstance(d, list) else next((v for v in d.values() if isinstance(v, list)), [])
-    return {str(x.get("marca","")).strip() for x in items if isinstance(x, dict) and x.get("marca")}
+    return {str(x.get("marca_detectada","")).strip() for x in items if isinstance(x, dict) and x.get("marca_detectada")}
 
 def es_int(v):
     try: int(v); return True

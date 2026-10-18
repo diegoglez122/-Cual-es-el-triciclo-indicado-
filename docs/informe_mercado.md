@@ -385,3 +385,19 @@ Advertencia: los dummies de marca capturan buena parte de lo que "explica" el pr
 - **Asociación ≠ causalidad**: marca, autonomía y precio los fija el mismo vendedor; nada aquí identifica efectos causales.
 
 - **Ventana temporal**: una semana (2026-10-08 a 2026-10-14); sin serie histórica no hay tendencias ni estacionalidad.
+
+---
+
+## §13. Validación por clustering (757 anuncios)
+
+Se aplicó KMeans y Ward jerárquico sobre los 757 anuncios aceptados para verificar si existe estructura latente no capturada por el análisis descriptivo. Variables: precio (USD), autonomía (km), voltaje (V), tipo (eléctrico/híbrido). Se excluyeron 10 casos con `precio_publicado < 500 USD` por corresponder a valores placeholder de scraping, quedando n=747.
+
+**Resultado.** El test de Hartigan (dip test) sobre la distribución de precios rechaza la hipótesis de unimodalidad (estadístico=0.0301, p=0.0001), identificando dos modos suaves: **$3,642** y **$4,399**. La diferencia entre modos no es por marca individual sino por **combinación técnica**: el modo superior concentra 72V con autonomías de 100–120km; el modo inferior mezcla 60V/72V con 80–100km. Las marcas dominantes de cada modo son distintas (Kvitova, Oim, Mvp vs Bryderk, Star, Maf).
+
+**Relación con §1.** El hallazgo de que Jmd domina el precio (+82% sobre Viento Rápido) opera **fuera** del mercado masivo: Jmd tiene mediana 6,200 USD (n=14, percentil 98), mientras Viento Rápido tiene mediana 3,400 USD (n=26). La jerarquía de marca no explica la bimodalidad central del mercado; la explica la cola premium. Esto **refina** §1: la marca segmenta la parte alta del mercado, la especificación técnica segmenta el grueso.
+
+**Limitación.** 187 anuncios (24.7%) no reportan voltaje, introduciendo ruido en la separación técnica. La bimodalidad detectada es sutil (dip estadístico 0.03), no una separación dramática en dos mercados.
+
+**Conclusión.** El clustering **valida y refina** el modelo del informe: no hay estructura oculta no documentada. El precio es bimodal suave con modos en $3,642 y $4,399, separados por combinación técnica, y una cola premium identificable por marca (Jmd, percentil 98).
+
+**Evidencia.** `graficos/clustering_anuncios.png` (silhouette vs k + dendrograma Ward), `graficos/distribucion_precio_kde.png` (KDE con picos detectados). Script: `scripts/clustering_anuncios.py`.
