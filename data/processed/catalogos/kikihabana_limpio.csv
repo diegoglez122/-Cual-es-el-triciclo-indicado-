@@ -1,0 +1,17 @@
+id,nombre_importadora,precio_usd,marca,modelo,tipo,tiene_panel_solar,capacidad_carga_kg,autonomia_km,voltaje_bateria,disponibilidad,url,fecha_scraping
+2341,Kikihabana,3300.00,BD,BD TAXI PANEL SOLAR,electric,true,,110,72,in_stock,https://kikihabana.com/producto/triciclo-panel-solar-para-cuba-2/,2026-10-22
+2254,Kikihabana,3399.00,CYT,CYT PANEL SOLAR,,true,800,,72,in_stock,https://kikihabana.com/producto/triciclo-panel-solar-para-cuba/,2026-10-22
+2243,Kikihabana,2999.00,IZUKI,IZUKI,electric,false,,100,72,in_stock,https://kikihabana.com/producto/triciclo-electrico-para-cuba-2/,2026-10-22
+871,Kikihabana,2100.00,JOBANG,JOBANG ZUIMI,,false,450,,72,in_stock,https://kikihabana.com/producto/envio-de-triciclos-electricos-a-cuba/,2026-10-22
+2279,Kikihabana,3200.00,MOSHOZUKI,MOSHOZUKI ULTRA LITHIUM LIFEPO4,,false,,100,72,in_stock,https://kikihabana.com/producto/triciclo-electrico-para-cuba-3/,2026-10-22
+1457,Kikihabana,3200.00,RALLY,RALLY PASAJEROS,,false,,85-70,72,in_stock,https://kikihabana.com/producto/triciclos-electricos-para-cuba-2/,2026-10-22
+1236,Kikihabana,2800.00,RALLY,CARGA RALLY,,false,2000,,,in_stock,https://kikihabana.com/producto/triciclos-para-cuba/,2026-10-22
+1212,Kikihabana,3000.00,FUGUIGUAN,FUGUIGUAN EXTENSOR RANGO GRATIS,electric,false,450,,70,in_stock,https://kikihabana.com/producto/triciclo-electrico-fuguiguan-extensor-de-rango-gratis/,2026-10-22
+1339,Kikihabana,2800.00,ONEBOT,ONEBOT,,false,500,,72,in_stock,https://kikihabana.com/producto/triciclos-electricos-para-cuba/,2026-10-22
+1480,Kikihabana,2900.00,VEDCA,VEDCA 2025 LITHIUM,,false,500,,72,in_stock,https://kikihabana.com/producto/triciclo-electrico-vedca/,2026-10-22
+2390,Kikihabana,2999.00,VEDCA,VEDCA C800,,false,900,100-120,72,in_stock,https://kikihabana.com/producto/triciclo-de-transporte/,2026-10-22
+1439,Kikihabana,,JING PIN,JING PIN,hibrido,false,800,,72,in_stock,https://kikihabana.com/producto/triciclos-hibridos-para-cuba/,2026-10-22
+2233,Kikihabana,3399.00,IZUKI,IZUKI,hibrido,false,500,200,60,in_stock,https://kikihabana.com/producto/triciclo-hibrido-psra-cuba/,2026-10-22
+1959,Kikihabana,3500.00,TRECK,TRECK RAMPANTE ESTACIÓN ENERGÍA EBL GRATIS,,false,,,,in_stock,https://kikihabana.com/producto/triciclos-de-gasolina-para-cuba/,2026-10-22
+1431,Kikihabana,2900.00,BERA,BERA PASAJEROS CARGA,hibrido,false,400,,72,in_stock,https://kikihabana.com/producto/triciclo-hibrido-para-cuba/,2026-10-22
+1415,Kikihabana,3100.00,BERA,BERA GASOLINA,hibrido,false,,,12,in_stock,https://kikihabana.com/producto/triciclo-de-gasolina-para-cuba/,2026-10-22
