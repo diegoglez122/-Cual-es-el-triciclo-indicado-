@@ -27,11 +27,18 @@ __pycache__/
 *.html
 
 # ===== Datos crudos del scraping (regenerables) =====
-scraping/data/
+scraping/data/*
+!scraping/data/catalogos/
 revolico_raw_p*.html
 revolico_state_p*.json
 *_state_*.json
 cache_*.json
+
+# ===== Catálogos: HTMLs/JSONs masivos (regenerables) =====
+scraping/data/catalogos/*
+!scraping/data/catalogos/.gitkeep
+!scraping/data/catalogos/manifest*.json
+!scraping/data/catalogos/README.md
 
 # ===== Sistema =====
 .DS_Store

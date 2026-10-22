@@ -1,0 +1,8 @@
+id,nombre_importadora,precio_usd,marca,modelo,tipo,tiene_panel_solar,capacidad_carga_kg,autonomia_km,voltaje_bateria,disponibilidad,url,fecha_scraping
+16666,MZ Products,3790.00,MZ Products,E-CARGO,electric,false,500,80-100,72,out_of_stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-60-ah-2500w-mz-products/,2026-10-22
+17145,MZ Products,4150.00,MZ Products,E-CARGO,electric,false,525,80-100,72,out_of_stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-80ah-mz-products-cargo/,2026-10-22
+17759,MZ Products,4430.00,MZ Products,E-CARGO ULTRA,electric,false,1000,80-100,72,in_stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-80ah-e-cargo-ultra-mz-products/,2026-10-22
+15021,MZ Products,4680.00,MZ Products,E-CARGO,electric,false,525,120-180,72,out_of_stock,https://www.mzproducts.com/producto/triciclo-electrico-100a-mz-products-cargo/,2026-10-22
+18486,MZ Products,4950.00,MZ Products,E-CARGO POWER,electric,false,1000,100-120,72,in_stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-100ah-e-cargo-ultra-mz-products/,2026-10-22
+17382,MZ Products,5100.00,MZ Products,PASAJERO,combustion,false,2000-2500,,,in_stock,https://www.mzproducts.com/producto/triciclo-electrico-combustion-200cc-mz-products-c-runer/,2026-10-22
+17437,MZ Products,5480.00,MZ Products,CARGA,combustion,false,2500-3000,,,in_stock,https://www.mzproducts.com/producto/triciclo-de-combustion-carga-250cc-mz-products/,2026-10-22
