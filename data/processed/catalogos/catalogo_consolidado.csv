@@ -1,0 +1,33 @@
+id,nombre_importadora,precio_usd,marca,modelo,tipo,tiene_panel_solar,capacidad_carga_kg,autonomia_km,voltaje_bateria,disponibilidad,url,fecha_scraping
+16666,MZ Products,3790.0,MZ Products,E-CARGO,electrico,False,500.0,,72.0,en stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-60-ah-2500w-mz-products/,2026-10-22
+17145,MZ Products,4150.0,MZ Products,E-CARGO,electrico,False,525.0,,72.0,en stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-80ah-mz-products-cargo/,2026-10-22
+17759,MZ Products,4430.0,MZ Products,E-CARGO ULTRA,electrico,False,1000.0,,72.0,en stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-80ah-e-cargo-ultra-mz-products/,2026-10-22
+15021,MZ Products,4680.0,MZ Products,E-CARGO,electrico,False,525.0,,72.0,en stock,https://www.mzproducts.com/producto/triciclo-electrico-100a-mz-products-cargo/,2026-10-22
+18486,MZ Products,4950.0,MZ Products,E-CARGO POWER,electrico,False,1000.0,,72.0,en stock,https://www.mzproducts.com/producto/triciclo-electrico-72v-100ah-e-cargo-ultra-mz-products/,2026-10-22
+17382,MZ Products,5100.0,MZ Products,PASAJERO,combustion,False,,,,en stock,https://www.mzproducts.com/producto/triciclo-electrico-combustion-200cc-mz-products-c-runer/,2026-10-22
+17437,MZ Products,5480.0,MZ Products,CARGA,combustion,False,,,,en stock,https://www.mzproducts.com/producto/triciclo-de-combustion-carga-250cc-mz-products/,2026-10-22
+2341,Kikihabana,3300.0,BD,BD TAXI PANEL SOLAR,electrico,True,,110.0,72.0,en stock,https://kikihabana.com/producto/triciclo-panel-solar-para-cuba-2/,2026-10-22
+2254,Kikihabana,3399.0,CYT,CYT PANEL SOLAR,no_especificado,True,800.0,,72.0,en stock,https://kikihabana.com/producto/triciclo-panel-solar-para-cuba/,2026-10-22
+2243,Kikihabana,3200.0,IZUKI,IZUKI,electrico,False,,100.0,72.0,en stock,https://kikihabana.com/producto/triciclo-electrico-para-cuba-2/,2026-10-22
+871,Kikihabana,3250.0,JOBANG,JOBANG ZUIMI,no_especificado,False,450.0,,72.0,en stock,https://kikihabana.com/producto/envio-de-triciclos-electricos-a-cuba/,2026-10-22
+2279,Kikihabana,2900.0,MOSHOZUKI,MOSHOZUKI ULTRA LITHIUM LIFEPO4,no_especificado,False,,100.0,72.0,en stock,https://kikihabana.com/producto/triciclo-electrico-para-cuba-3/,2026-10-22
+1457,Kikihabana,3200.0,RALLY,RALLY PASAJEROS,no_especificado,False,,,72.0,en stock,https://kikihabana.com/producto/triciclos-electricos-para-cuba-2/,2026-10-22
+1236,Kikihabana,2800.0,RALLY,CARGA RALLY,no_especificado,False,2000.0,,,en stock,https://kikihabana.com/producto/triciclos-para-cuba/,2026-10-22
+1212,Kikihabana,3000.0,FUGUIGUAN,FUGUIGUAN EXTENSOR RANGO GRATIS,electrico,False,450.0,,70.0,en stock,https://kikihabana.com/producto/triciclo-electrico-fuguiguan-extensor-de-rango-gratis/,2026-10-22
+1339,Kikihabana,2800.0,ONEBOT,ONEBOT,no_especificado,False,500.0,,72.0,en stock,https://kikihabana.com/producto/triciclos-electricos-para-cuba/,2026-10-22
+1480,Kikihabana,2900.0,VEDCA,VEDCA 2025 LITHIUM,no_especificado,False,500.0,,72.0,en stock,https://kikihabana.com/producto/triciclo-electrico-vedca/,2026-10-22
+2390,Kikihabana,2999.0,VEDCA,VEDCA C800,no_especificado,False,900.0,,72.0,en stock,https://kikihabana.com/producto/triciclo-de-transporte/,2026-10-22
+1439,Kikihabana,3000.0,JING PIN,JING PIN,hibrido,False,800.0,,72.0,en stock,https://kikihabana.com/producto/triciclos-hibridos-para-cuba/,2026-10-22
+2233,Kikihabana,3399.0,IZUKI,IZUKI,hibrido,False,500.0,200.0,60.0,en stock,https://kikihabana.com/producto/triciclo-hibrido-psra-cuba/,2026-10-22
+1959,Kikihabana,3500.0,TRECK,TRECK RAMPANTE ESTACIÓN ENERGÍA EBL GRATIS,no_especificado,False,,,,en stock,https://kikihabana.com/producto/triciclos-de-gasolina-para-cuba/,2026-10-22
+1431,Kikihabana,3500.0,BERA,BERA PASAJEROS CARGA,hibrido,False,400.0,,72.0,en stock,https://kikihabana.com/producto/triciclo-hibrido-para-cuba/,2026-10-22
+1415,Kikihabana,3100.0,BERA,BERA GASOLINA,hibrido,False,,,12.0,en stock,https://kikihabana.com/producto/triciclo-de-gasolina-para-cuba/,2026-10-22
+23591,Nihao53,3330.0,Nihao53,,electrico,False,260.0,,,desconocido,https://nihao53.com/shop/nh08tap1-triciclo-electrico-para-servicios-de-transportacion-de-pasajeros-23591,2026-10-23
+23631,Nihao53,3948.0,Nihao53,,electrico,False,260.0,,,desconocido,https://nihao53.com/shop/nh08taper1-triciclo-electrico-para-servicios-de-transportacion-de-pasajeros-con-extensor-de-rango-23631,2026-10-23
+23817,Nihao53,4400.0,Nihao53,,combustion,False,,,12.0,desconocido,https://nihao53.com/shop/nh08tc12p1-triciclo-de-combustion-10-12-pasajeros-23817,2026-10-23
+23661,Nihao53,0.0,Nihao53,,electrico,False,3000.0,,,desconocido,https://nihao53.com/shop/nh08tc250cc3t1-triciclo-de-combustion-de-carga-3t-23661,2026-10-23
+2949,Nihao53,2955.0,Nihao53,,electrico,False,500.0,,,desconocido,https://nihao53.com/shop/nh08tcct1-triciclo-electrico-de-carga-cerrado-2949,2026-10-23
+23590,Nihao53,4100.0,Nihao53,,electrico,False,,,220.0,desconocido,https://nihao53.com/shop/nh08tcp1-triciclo-electrico-cerrado-para-conductor-y-pasajeros-23590,2026-10-23
+1936,Nihao53,2425.0,Nihao53,,electrico,False,550.0,,220.0,desconocido,https://nihao53.com/shop/nh08tct1-triciclo-electrico-de-pasajeros-con-techo-de-lona-1936,2026-10-23
+23634,Nihao53,3100.0,Nihao53,,electrico,False,1000.0,,,desconocido,https://nihao53.com/shop/nh08tct250cc1-triciclo-de-combustion-de-carga-1t-23634,2026-10-23
+2948,Nihao53,0.0,Nihao53,,electrico,False,500.0,,,desconocido,https://nihao53.com/shop/nh08tctt1-triciclo-electrico-de-carga-con-cabina-2948,2026-10-23
