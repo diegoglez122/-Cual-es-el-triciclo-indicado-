@@ -124,6 +124,36 @@ def main() -> int:
         if mask.any():
             df.loc[mask, "tipo"] = df[mask].apply(inferir_tipo, axis=1)
 
+    # Inferencia final para cualquier fila que siga sin tipo (todas las importadoras)
+    if "tipo" in df.columns:
+        def inferir_tipo_final(row):
+            texto = _sin_tildes(" ".join([
+                str(row.get("url", "") or ""),
+                str(row.get("modelo", "") or ""),
+                str(row.get("marca", "") or ""),
+            ]))
+            # Híbrido primero: suele mencionar tanto eléctrico como gasolina
+            if any(k in texto for k in ("hybrid", "hibrido")):
+                return "hibrido"
+            if any(k in texto for k in ("gas", "fuel", "combustion", "gasolina")):
+                return "combustion"
+            if any(k in texto for k in (
+                "electric", "panel", "solar", "fotovoltaic", "taxi",
+                "cargo", "carga", "lithium", "litio", "bateria",
+            )):
+                return "electrico"
+            # Sentido común: panel solar o voltaje de batería => eléctrico
+            panel = row.get("tiene_panel_solar")
+            tiene_panel = not pd.isna(panel) and str(panel).strip().lower() in ("true", "1", "si", "sí")
+            voltaje = row.get("voltaje_bateria")
+            if tiene_panel or not pd.isna(voltaje):
+                return "electrico"
+            return row.get("tipo")
+
+        mask_final = df["tipo"] == "no_especificado"
+        if mask_final.any():
+            df.loc[mask_final, "tipo"] = df[mask_final].apply(inferir_tipo_final, axis=1)
+
     # Normalización de disponibilidad
     if "disponibilidad" in df.columns:
         df["disp_norm"] = df["disponibilidad"].apply(_sin_tildes)

@@ -1,0 +1,10 @@
+id,nombre_importadora,precio_usd,marca,modelo,tipo,tiene_panel_solar,capacidad_carga_kg,autonomia_km,voltaje_bateria,disponibilidad,url,fecha_scraping
+23591,Nihao53,3330.00,Nihao53,,eléctrico,false,260,,,desconocido,https://nihao53.com/shop/nh08tap1-triciclo-electrico-para-servicios-de-transportacion-de-pasajeros-23591,2026-10-24
+23631,Nihao53,3948.00,Nihao53,,eléctrico,false,260,,,desconocido,https://nihao53.com/shop/nh08taper1-triciclo-electrico-para-servicios-de-transportacion-de-pasajeros-con-extensor-de-rango-23631,2026-10-24
+23817,Nihao53,4400.00,Nihao53,,combustión,false,,,12,desconocido,https://nihao53.com/shop/nh08tc12p1-triciclo-de-combustion-10-12-pasajeros-23817,2026-10-24
+23661,Nihao53,,Nihao53,,combustión,false,3000,,,desconocido,https://nihao53.com/shop/nh08tc250cc3t1-triciclo-de-combustion-de-carga-3t-23661,2026-10-24
+2949,Nihao53,2955.00,Nihao53,,eléctrico,false,500,70-100,,desconocido,https://nihao53.com/shop/nh08tcct1-triciclo-electrico-de-carga-cerrado-2949,2026-10-24
+23590,Nihao53,4100.00,Nihao53,,eléctrico,false,,,220,desconocido,https://nihao53.com/shop/nh08tcp1-triciclo-electrico-cerrado-para-conductor-y-pasajeros-23590,2026-10-24
+1936,Nihao53,2425.00,Nihao53,,eléctrico,false,550,70-100,220,desconocido,https://nihao53.com/shop/nh08tct1-triciclo-electrico-de-pasajeros-con-techo-de-lona-1936,2026-10-24
+23634,Nihao53,3100.00,Nihao53,,combustión,false,1000,,,desconocido,https://nihao53.com/shop/nh08tct250cc1-triciclo-de-combustion-de-carga-1t-23634,2026-10-24
+2948,Nihao53,,Nihao53,,eléctrico,false,500,70-100,,desconocido,https://nihao53.com/shop/nh08tctt1-triciclo-electrico-de-carga-con-cabina-2948,2026-10-24

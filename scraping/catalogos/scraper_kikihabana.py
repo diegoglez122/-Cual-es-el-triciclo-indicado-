@@ -5,6 +5,12 @@ Scraper de catálogos de Kikihabana (kikihabana.com) — triciclos.
 Sitio WooCommerce. Descubre los productos de triciclo recorriendo categoría
 y búsqueda interna, y extrae las ficha de cada producto.
 
+Precios:
+  - Si el producto publica un rango, se guarda el precio mínimo.
+  - Si publica una oferta, se guarda el precio actual (no el precio tachado).
+  - Si no publica un precio numérico ("Consultar"), `precio_usd` queda en
+    blanco/None y el crudo marca `precio_consultar=true`.
+
 Salidas:
   - Crudo:  scraping/data/catalogos/kikihabana_raw.json
   - Limpio: data/processed/catalogos/kikihabana_limpio.csv
@@ -114,6 +120,11 @@ ETIQUETAS_CARGA = (
     "carga util",
 )
 ETIQUETAS_TIPO = ("tipo de conduccion", "tipo de propulsion", "tipo")
+
+RE_PRECIO_CONSULTAR = re.compile(
+    r"\bconsult(?:ar|e|a|arlo|arla)?\b|a convenir|cotiza(?:r|ci[oó]n)?|precio a pedido",
+    re.IGNORECASE,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -370,6 +381,26 @@ def disponibilidad_canonica(json_ld: dict[str, Any], clases: list[str], texto_st
     return "unknown"
 
 
+def precios_de_spec(spec: Any) -> list[float]:
+    """Extrae precios de priceSpecification, que WooCommerce a veces anida
+    en diccionarios con claves numéricas ("0", "1", ...)."""
+    precios: list[float] = []
+    if isinstance(spec, dict):
+        valor = spec.get("price")
+        if valor is not None:
+            numero = a_numero(str(valor))
+            if numero is not None:
+                precios.append(numero)
+        for clave, valor in spec.items():
+            if clave == "price":
+                continue
+            precios.extend(precios_de_spec(valor))
+    elif isinstance(spec, list):
+        for elemento in spec:
+            precios.extend(precios_de_spec(elemento))
+    return precios
+
+
 def extraer_ofertas(json_ld: dict[str, Any]) -> tuple[float | None, str]:
     ofertas = json_ld.get("offers") or []
     if isinstance(ofertas, dict):
@@ -380,40 +411,49 @@ def extraer_ofertas(json_ld: dict[str, Any]) -> tuple[float | None, str]:
         if not isinstance(oferta, dict):
             continue
         moneda = str(oferta.get("priceCurrency") or moneda)
-        # AggregateOffer
+        # AggregateOffer (rango de precios): nos quedamos con el mínimo
         if oferta.get("@type") == "AggregateOffer":
             for k in ("lowPrice", "highPrice", "price"):
                 v = oferta.get(k)
                 if v is not None:
                     val = a_numero(str(v))
-                    if val:
+                    if val is not None:
                         precios.append(val)
             continue
-        specs = oferta.get("priceSpecification") or []
-        if isinstance(specs, dict):
-            specs = [specs]
-        candidatos = [oferta.get("price")] + [s.get("price") for s in specs if isinstance(s, dict)]
-        for candidato in candidatos:
-            if candidato is None:
-                continue
-            valor = a_numero(str(candidato))
-            if valor:
-                precios.append(valor)
-    if precios:
-        precio = min(precios)
-    else:
-        precio = None
+        precios.extend(precios_de_spec(oferta.get("priceSpecification")))
+        valor = oferta.get("price")
+        if valor is not None:
+            numero = a_numero(str(valor))
+            if numero is not None:
+                precios.append(numero)
+    precio = min(precios) if precios else None
     return precio, moneda
 
 
-def precio_desde_html(soup: BeautifulSoup) -> tuple[float | None, str, bool]:
+def precios_de_elemento(elemento: Any, excluir_antiguos: bool = True) -> list[float]:
+    precios: list[float] = []
+    for amount in elemento.select(".woocommerce-Price-amount"):
+        if excluir_antiguos and amount.find_parent("del"):
+            continue
+        valor = a_numero(amount.get_text(" ", strip=True))
+        if valor is not None:
+            precios.append(valor)
+    return precios
+
+
+def precio_desde_html(
+    soup: BeautifulSoup, contenedor: Any | None = None
+) -> tuple[float | None, str, bool]:
+    raiz = contenedor if contenedor is not None else soup
     for selector in (".wd-single-price", ".elementor-widget-wd_single_product_price", ".price"):
-        for elemento in soup.select(selector):
-            # evitar precios de productos relacionados muy amplios; coger el que esté cerca de summary
+        for elemento in raiz.select(selector):
             texto = normalizar_espacios(elemento.get_text(" ", strip=True))
-            precio = a_numero(texto)
-            if precio:
-                return precio, texto, elemento.find("del") is not None
+            # En una oferta, el precio actual está en <ins> y el antiguo en <del>.
+            precios = precios_de_elemento(elemento, excluir_antiguos=True)
+            if not precios:
+                precios = precios_de_elemento(elemento, excluir_antiguos=False)
+            if precios:
+                return min(precios), texto, elemento.find("del") is not None
     return None, "", False
 
 
@@ -579,16 +619,26 @@ def extraer_ficha(sesion: requests.Session, url: str, pausa: float) -> dict[str,
         else ""
     ) or NOMBRE_IMPORTADORA
 
+    resumen = soup.select_one(".summary, .entry-summary")
+
     precio, moneda = extraer_ofertas(json_ld)
-    texto_precio = ""
-    en_oferta = False
-    if precio is None:
-        precio, texto_precio, en_oferta = precio_desde_html(soup)
+    precio_html, texto_precio, en_oferta = precio_desde_html(soup, resumen)
+    if precio_html is not None and (precio is None or en_oferta):
+        # En ofertas el JSON-LD puede conservar el precio de lista; el HTML
+        # muestra el precio actual dentro de <ins>.
+        precio = precio_html
     if not texto_precio:
-        for elemento in soup.select(".wd-single-price, .price"):
+        for elemento in (resumen or soup).select(".wd-single-price, .price"):
             texto_precio = normalizar_espacios(elemento.get_text(" ", strip=True))
             en_oferta = en_oferta or elemento.find("del") is not None
             break
+
+    precio_consultar = False
+    if precio is None:
+        texto_resumen = normalizar_espacios((resumen or soup).get_text(" ", strip=True))
+        if RE_PRECIO_CONSULTAR.search(texto_precio or texto_resumen):
+            precio_consultar = True
+            texto_precio = texto_precio or "Consultar"
 
     especificaciones, caracteristicas = parsear_especificaciones(soup)
     texto_stock = texto_disponibilidad(soup)
@@ -663,6 +713,7 @@ def extraer_ficha(sesion: requests.Session, url: str, pausa: float) -> dict[str,
         "moneda": moneda or "USD",
         "texto_precio": texto_precio,
         "precio_en_oferta": en_oferta,
+        "precio_consultar": precio_consultar,
         "tiene_panel_solar": bool(RE_PANEL_SOLAR.search(texto_tecnico)),
         "capacidad_carga_kg": capacidad_carga,
         "autonomia_km": autonomia,
@@ -714,7 +765,11 @@ def escribir_crudo(fichas: list[dict[str, Any]], visitadas: list[str], errores: 
             "n_productos": len(fichas),
             "n_errores": len(errores),
             "errores": errores,
-            "nota": "Precios en USD tal como los publica el vendedor (importación a Cuba).",
+            "nota": (
+                "Precios en USD tal como los publica el vendedor (importación a Cuba). "
+                "En rangos se usa el mínimo y en ofertas el precio actual; "
+                "precio_usd=null con precio_consultar=true significa 'Consultar'."
+            ),
         },
         "productos": fichas,
     }
