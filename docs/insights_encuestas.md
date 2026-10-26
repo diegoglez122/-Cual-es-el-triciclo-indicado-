@@ -8,13 +8,13 @@
 
 ### 1) Ganancias vs. Tiempo en negocio
 
-| tendencia_ganancias | aumentado | disminuido | estable | All |
+| tendencia_ganancias | Aumentado | Disminuido | Estable | All |
 |---------------------|-----------|------------|---------|-----|
 | tiempo_en_negocio   |           |            |         |     |
-| 1_3a                | 1         | 2          | 4       | 7   |
-| 6m_1a               | 1         | 6          | 5       | 12  |
-| gt3a                | 2         | 4          | 5       | 11  |
-| lt6m                | 0         | 5          | 5       | 10  |
+| 1 a 3 años          | 1         | 2          | 4       | 7   |
+| 6 meses a 1 año     | 1         | 6          | 5       | 12  |
+| Menos de 6 meses    | 0         | 5          | 5       | 10  |
+| Más de 3 años       | 2         | 4          | 5       | 11  |
 | All                 | 4         | 17         | 19      | 40  |
 
 ### 2) Fijación de precios
@@ -28,8 +28,8 @@
 **fijacion_precio:**
 | fijacion_precio | count |
 |-----------------|-------|
-| choferes        | 21    |
-| onat            | 13    |
+| Choferes        | 21    |
+| ONAT            | 13    |
 | None            | 6     |
 
 ### 3) Impacto Estatal (afectado_estatales = Si)
@@ -38,11 +38,11 @@
 - **Distribución de tendencia_ganancias:**
   | tendencia_ganancias | count |
   |---------------------|-------|
-  | disminuido          | 10    |
-  | estable             | 3     |
-  | aumentado           | 2     |
+  | Disminuido          | 10    |
+  | Estable             | 3     |
+  | Aumentado           | 2     |
 
-- **Predominante:** disminuido
+- **Predominante:** Disminuido
 
 ### 4) Dueño vs Chofer
 
@@ -65,9 +65,9 @@
 - **Distribución de tendencia_ganancias:**
   | tendencia_ganancias | count |
   |---------------------|-------|
-  | disminuido          | 10    |
-  | estable             | 6     |
-  | aumentado           | 2     |
+  | Disminuido          | 10    |
+  | Estable             | 6     |
+  | Aumentado           | 2     |
 
 ### 6) Recuperación de inversión
 
@@ -76,8 +76,8 @@
 - **Por recupero_inversion:**
   | recupero_inversion | marca_top | modalidad_top | n  |
   |--------------------|-----------|---------------|----|
-  | No                 | Raly      | urbano        | 29 |
-  | Si                 | Raly      | mixto         | 11 |
+  | No                 | Raly      | Pasaje Urbano | 29 |
+  | Si                 | Raly      | Pasaje y Carga | 11 |
 
 ### 7) Electricidad - costo luz y panel solar
 
@@ -109,42 +109,39 @@
 
 - **n:** 13
 - **Modalidad predominante:**
-  | modalidad | count |
-  |-----------|-------|
-  | mixto     | 8     |
-  | urbano    | 5     |
+  | modalidad      | count |
+  |----------------|-------|
+  | Pasaje y Carga | 8     |
+  | Pasaje Urbano  | 5     |
 
 ### 10) Fallas de gomas (piezas_gomas = Si)
 
 - **n:** 23
 - **Modalidad predominante:**
-  | modalidad      | count |
-  |----------------|-------|
-  | mixto          | 12    |
-  | urbano         | 8     |
-  | intermunicipal | 3     |
+  | modalidad             | count |
+  |-----------------------|-------|
+  | Pasaje y Carga        | 12    |
+  | Pasaje Urbano         | 8     |
+  | Pasaje Intermunicipal | 3     |
 
 ### 11) Ranking de fallas por marca
 
 | marca            | total_encuestados | fallas_bateria | fallas_gomas | fallas_motor | total_fallas |
 |------------------|-------------------|----------------|--------------|--------------|--------------|
-| Raly             | 12                | 3              | 8            | 1            | 12           |
+| Raly             | 13                | 4              | 9            | 1            | 14           |
 | Jinpeng          | 6                 | 2              | 4            | 1            | 7            |
 | Nippon           | 3                 | 3              | 3            | 0            | 6            |
 | ACC              | 3                 | 1              | 2            | 1            | 4            |
-| Oneboot          | 1                 | 1              | 1            | 0            | 2            |
-| Rali (dejar así) | 1                 | 1              | 1            | 0            | 2            |
-| Onebot           | 2                 | 1              | 0            | 0            | 1            |
+| Onebot           | 3                 | 2              | 1            | 0            | 3            |
+| Xinger           | 2                 | 0              | 2            | 0            | 2            |
 | Oim              | 1                 | 1              | 0            | 0            | 1            |
 | Cem              | 1                 | 0              | 1            | 0            | 1            |
 | VEDCA            | 2                 | 0              | 1            | 0            | 1            |
-| Xinger           | 1                 | 0              | 1            | 0            | 1            |
-| Singer           | 1                 | 0              | 1            | 0            | 1            |
 | Fénix            | 1                 | 0              | 0            | 0            | 0            |
 | Kvitova          | 1                 | 0              | 0            | 0            | 0            |
 | Izuki            | 2                 | 0              | 0            | 0            | 0            |
 | Topmaq           | 1                 | 0              | 0            | 0            | 0            |
-| mishozuki        | 1                 | 0              | 0            | 0            | 0            |
+| Mishozuki        | 1                 | 0              | 0            | 0            | 0            |
 
 *CSV guardado:* `data/processed/encuestas_eda/dw_fallas_marcas.csv`
 

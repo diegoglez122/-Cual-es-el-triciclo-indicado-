@@ -52,47 +52,42 @@
 
 ### 3.1 Vida útil de batería por marca (encuestas)
 
-| marca            |   n |   vida_bat_meses_prom |
-|:-----------------|----:|----------------------:|
-| Oim              |   1 |                  48   |
-| Rali (dejar así) |   1 |                  48   |
-| Oneboot          |   1 |                  30   |
-| Singer           |   1 |                  30   |
-| Nippon           |   3 |                  28   |
-| Raly             |  12 |                  24.5 |
-| Jinpeng          |   6 |                  20.5 |
-| ACC              |   3 |                  18   |
-| mishozuki        |   1 |                  18   |
-| Kvitova          |   1 |                  18   |
-| Izuki            |   2 |                  18   |
-| Cem              |   1 |                  18   |
-| VEDCA            |   2 |                  18   |
-| Onebot           |   2 |                  13.5 |
-| Fénix            |   1 |                   9   |
-| Topmaq           |   1 |                   9   |
+| marca     |   n |   vida_bat_meses_prom |
+|:----------|----:|----------------------:|
+| Oim       |   1 |               48      |
+| Xinger    |   2 |               30      |
+| Nippon    |   3 |               28      |
+| Raly      |  13 |               26.3077 |
+| Jinpeng   |   6 |               20.5    |
+| Onebot    |   3 |               19      |
+| ACC       |   3 |               18      |
+| Kvitova   |   1 |               18      |
+| Izuki     |   2 |               18      |
+| Cem       |   1 |               18      |
+| VEDCA     |   2 |               18      |
+| Mishozuki |   1 |               18      |
+| Fénix     |   1 |                9      |
+| Topmaq    |   1 |                9      |
 
 
 ### 3.2 Cruce con ranking de fallas
 
-| marca            |   total_encuestados |   fallas_bateria |   fallas_gomas |   fallas_motor |   total_fallas |
-|:-----------------|--------------------:|-----------------:|---------------:|---------------:|---------------:|
-| Raly             |                  12 |                3 |              8 |              1 |             12 |
-| Jinpeng          |                   6 |                2 |              4 |              1 |              7 |
-| Nippon           |                   3 |                3 |              3 |              0 |              6 |
-| ACC              |                   3 |                1 |              2 |              1 |              4 |
-| Oneboot          |                   1 |                1 |              1 |              0 |              2 |
-| Rali (dejar así) |                   1 |                1 |              1 |              0 |              2 |
-| Onebot           |                   2 |                1 |              0 |              0 |              1 |
-| Oim              |                   1 |                1 |              0 |              0 |              1 |
-| Cem              |                   1 |                0 |              1 |              0 |              1 |
-| VEDCA            |                   2 |                0 |              1 |              0 |              1 |
-| Xinger           |                   1 |                0 |              1 |              0 |              1 |
-| Singer           |                   1 |                0 |              1 |              0 |              1 |
-| Fénix            |                   1 |                0 |              0 |              0 |              0 |
-| Kvitova          |                   1 |                0 |              0 |              0 |              0 |
-| Izuki            |                   2 |                0 |              0 |              0 |              0 |
-| Topmaq           |                   1 |                0 |              0 |              0 |              0 |
-| mishozuki        |                   1 |                0 |              0 |              0 |              0 |
+| marca     |   total_encuestados |   fallas_bateria |   fallas_gomas |   fallas_motor |   total_fallas |
+|:----------|--------------------:|-----------------:|---------------:|---------------:|---------------:|
+| Raly      |                  13 |                4 |              9 |              1 |             14 |
+| Jinpeng   |                   6 |                2 |              4 |              1 |              7 |
+| Nippon    |                   3 |                3 |              3 |              0 |              6 |
+| ACC       |                   3 |                1 |              2 |              1 |              4 |
+| Onebot    |                   3 |                2 |              1 |              0 |              3 |
+| Xinger    |                   2 |                0 |              2 |              0 |              2 |
+| VEDCA     |                   2 |                0 |              1 |              0 |              1 |
+| Oim       |                   1 |                1 |              0 |              0 |              1 |
+| Cem       |                   1 |                0 |              1 |              0 |              1 |
+| Fénix     |                   1 |                0 |              0 |              0 |              0 |
+| Kvitova   |                   1 |                0 |              0 |              0 |              0 |
+| Izuki     |                   2 |                0 |              0 |              0 |              0 |
+| Mishozuki |                   1 |                0 |              0 |              0 |              0 |
+| Topmaq    |                   1 |                0 |              0 |              0 |              0 |
 
 
 

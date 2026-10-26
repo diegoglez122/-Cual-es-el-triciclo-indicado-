@@ -21,15 +21,15 @@ CABECERA = ("id_encuesta,fecha,encuestador,provincia,municipio,marca,modelo,es_d
 
 ENUMS = {
     "provincia": ["Mayabeque","Artemisa","La Habana","Matanzas","Otra"],
-    "modalidad": ["urbano","intermunicipal","carga","mixto"],
-    "tiempo_en_negocio": ["lt6m","6m_1a","1_3a","gt3a"],
-    "capacidad": ["hasta_5","mas_5"],
-    "vida_bateria": ["lt6m","6_12m","1_2a","2_3a","3_5a","gt5a","no_sabe"],
-    "fijacion_precio": ["onat","choferes","otro"],
-    "tendencia_ganancias": ["aumentado","estable","disminuido"],
-    "demanda_costo_vida": ["aumentado","estable","disminuido"],
-    "tipo_triciclo": ["electrico","hibrido"],
-    "como_adquirio": ["comprado_aqui","importado","otro"],
+    "modalidad": ["Pasaje Urbano","Pasaje Intermunicipal","Carga","Pasaje y Carga"],
+    "tiempo_en_negocio": ["Menos de 6 meses","6 meses a 1 año","1 a 3 años","Más de 3 años"],
+    "capacidad": ["Hasta 5","Más de 5"],
+    "vida_bateria": ["Menos de 6 meses","6 a 12 meses","1 a 2 años","2 a 3 años","3 a 5 años","Más de 5 años","No sabe"],
+    "fijacion_precio": ["ONAT","Choferes","Otro"],
+    "tendencia_ganancias": ["Aumentado","Estable","Disminuido"],
+    "demanda_costo_vida": ["Aumentado","Estable","Disminuido"],
+    "tipo_triciclo": ["Electrico","Combustion","Hibrido"],
+    "como_adquirio": ["Comprado aquí","Importado","Otro"],
 }
 
 BOOLS = ["es_duenio","precio_pasaje_fijo","hizo_inversiones","usa_panel_solar",

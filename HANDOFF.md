@@ -144,3 +144,16 @@ python scripts/analisis_mercado.py   # escribe docs/informe_mercado.md
 | 2026-10-06 14:25 | brave-planet | revolico-triciclos | Scrape 2 páginas (subagente) |
 | 2026-10-17 | (sesión anterior) | revolico-triciclos | Scraping p61-90 + pipeline 769 + reorganización scripts/ |
 | 2026-10-18 | (esta sesión) | revolico-triciclos | Reorganización final: scraping/, docs/, raíz limpia + ajuste de rutas |
+
+## Actualización 2026-10-24 (Fase de Ciencia de Datos completada)
+
+- **Estado general:** Fase de Ciencia de Datos 100% completada y auditada. Clustering, EDA de encuestas e EDA global finalizados. Datos listos para visualización.
+- **Análisis completados:**
+  - Clustering importadoras: k=3 (combustión premium / eléctricos carga media / híbridos económicos)
+  - Clustering encuestas: k=2 (propietarios eléctricos alto presupuesto / híbridos mixto)
+  - Insights encuestas (Bloques A/B/C) con CSVs para Datawrapper
+  - EDA global con comparativas, autonomía, marcas/batería corregida y correlaciones
+- **Próximos pasos:**
+  1. **Crear gráficos en Datawrapper** con los CSVs exportados.
+  2. **Generar el informe final** con `scripts/generar_informe.py` (pendiente de ejecutar cuando esté listo).
+  3. **App de Streamlit** es lo último pendiente.

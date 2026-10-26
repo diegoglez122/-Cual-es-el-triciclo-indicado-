@@ -1,18 +1,15 @@
 marca,total_encuestados,fallas_bateria,fallas_gomas,fallas_motor,total_fallas
-Raly,12,3,8,1,12
+Raly,13,4,9,1,14
 Jinpeng,6,2,4,1,7
 Nippon,3,3,3,0,6
 ACC,3,1,2,1,4
-Oneboot,1,1,1,0,2
-Rali (dejar así),1,1,1,0,2
-Onebot,2,1,0,0,1
+Onebot,3,2,1,0,3
+Xinger,2,0,2,0,2
+VEDCA,2,0,1,0,1
 Oim,1,1,0,0,1
 Cem,1,0,1,0,1
-VEDCA,2,0,1,0,1
-Xinger,1,0,1,0,1
-Singer,1,0,1,0,1
 Fénix,1,0,0,0,0
 Kvitova,1,0,0,0,0
 Izuki,2,0,0,0,0
+Mishozuki,1,0,0,0,0
 Topmaq,1,0,0,0,0
-mishozuki,1,0,0,0,0

@@ -46,12 +46,19 @@ def vida_bateria_meses(v):
         return np.nan
     mapeo = {
         "lt6m": 3,
+        "menos de 6 meses": 3,
         "6_12m": 9,
+        "6 a 12 meses": 9,
         "1_2a": 18,
+        "1 a 2 años": 18,
         "2_3a": 30,
+        "2 a 3 años": 30,
         "3_5a": 48,
+        "3 a 5 años": 48,
         "gt5a": 66,
+        "más de 5 años": 66,
         "no_sabe": np.nan,
+        "no sabe": np.nan,
     }
     if s in mapeo:
         return mapeo[s]

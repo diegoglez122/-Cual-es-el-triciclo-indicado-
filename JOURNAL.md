@@ -213,3 +213,18 @@ Descartados finales: 124, con distribución:
 **Lección:** Mover scripts con rutas relativas exige ajustar TODOS los consumidores de los datos que mueven; el glob vacío de `normalizar.py` habría producido un dedup silenciosamente vacío.
 **Artefactos:** `scraping/` (nuevo), `scraping/data/` (nuevo), `basura/` descartada, `google-chrome.deb` + `main` borrados, `.gitignore`, `AGENTS.md`, `HANDOFF.md`, 10 scripts editados + sus `.bak.20261018_123614`.
 **Próximo:** Continuar normalización/estudio de mercado; decidir cuándo commitear la reorganización.
+
+
+## [2026-10-24 · sábado] EDA, CLUSTERING Y AUDITORÍA TÉCNICA
+
+**Contexto:** Fase de Análisis de Datos (EDA) y Clustering.
+
+**Acción:** Creación de clústeres para importadoras (3 segmentos) y encuestas (2 perfiles). Creación del EDA de encuestas (`insights_encuestas.py`, `docs/insights_encuestas.md`) y EDA Global (Revolico, Importadoras, Correlaciones) con `scripts/eda_global.py`. Corrección del parseo de vida de batería (códigos `lt6m/6_12m/1_2a/2_3a/3_5a/gt5a` a meses) tras auditoría técnica. Actualización de marcas/encuestas 34-40, clustering de importadoras con k=3, clustering de encuestas con k=2.
+
+**Resultado:** 40 encuestas válidas, 3 CSVs exportados para Datawrapper (dw_tipos, dw_precios_importadora, dw_precio_tipo), además de dw_clusters_importadoras, dw_clusters_encuestas, dw_documentos, dw_fallas_marcas. 6+ scripts de análisis funcionando. Datos auditados (marcas OK 40/40, booleanos correctos, imputación con mediana justificada, conteo de documentos correcto). 
+
+**Lección:** Los códigos de encuesta (`2_3a`) requieren mapeo explícito; las afirmaciones deben basarse en cifras observables (12% más caro) en lugar de hipótesis sobre canales.
+
+**Artefactos:** `scripts/clustering_importadoras.py`, `scripts/clustering_encuestas.py`, `scripts/eda_catalogos.py`, `scripts/insights_encuestas.py`, `scripts/eda_global.py`, `data/processed/clustering_importadoras/dw_clusters_importadoras.csv`, `data/processed/clustering_encuestas/dw_clusters_encuestas.csv`, `data/processed/encuestas_eda/dw_documentos.csv`, `data/processed/encuestas_eda/dw_fallas_marcas.csv`, `docs/insights_encuestas.md`, `docs/eda_global.md`, `docs/graficos_eda/` (4 PNG).
+
+**Próximo:** Crear gráficos en Datawrapper y redactar el informe final.

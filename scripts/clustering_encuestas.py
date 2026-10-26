@@ -24,7 +24,7 @@ def normalizar_capacidad(v):
     if v is None:
         return np.nan
     s = str(v).strip().lower()
-    if s in ("mas_5", "mas de 5", ">5", "mas de5"):
+    if s in ("mas_5", "mas de 5", "más de 5", ">5", "mas de5"):
         return 1
     if s in ("hasta_5", "5 o menos", "<=5", "hasta 5"):
         return 0
