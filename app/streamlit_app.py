@@ -15,6 +15,30 @@ from app.recommend import recomendar_triciclo
 
 st.set_page_config(page_title="Triciclos Cuba", layout="wide")
 
+st.markdown(
+    """
+    <style>
+    [data-testid="stAppViewContainer"] {
+        background: linear-gradient(180deg, #ffffff 0%, #f0f2f6 100%);
+    }
+    h1 {
+        text-align: center;
+        color: #0b3d66;
+        font-weight: 800;
+    }
+    .footer {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid #d6dbe4;
+        text-align: center;
+        color: #6b7280;
+        font-size: 0.85rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("Triciclos Cuba")
 st.caption("Recomendador y análisis del mercado de triciclos en Cuba.")
 
@@ -163,3 +187,8 @@ La recomendación es orientativa y no sustituye una cotización formal con la
 importadora.
 """
     )
+
+st.markdown(
+    '<div class="footer">Proyecto de Ciencia de Datos - 2026</div>',
+    unsafe_allow_html=True,
+)
