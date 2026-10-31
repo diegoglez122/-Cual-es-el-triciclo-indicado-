@@ -47,22 +47,33 @@ tab_recomendador, tab_mercado, tab_metodologia = st.tabs(
 )
 
 with tab_recomendador:
-    with st.form("form_recomendador"):
-        presupuesto = st.number_input(
-            "Presupuesto (USD)",
-            min_value=0,
-            value=4000,
-            step=100,
-        )
-        uso = st.selectbox("Uso", ["Pasajeros", "Carga"])
-        tipo = st.selectbox(
-            "Tipo", ["Me da igual", "Eléctrico", "Combustible", "Híbrido"]
-        )
-        prioridad = st.selectbox(
-            "Prioridad", ["Precio", "Autonomía", "Capacidad"]
-        )
-        solo_en_stock = st.checkbox("Solo mostrar triciclos en stock")
-        enviado = st.form_submit_button("Buscar")
+    col1, col2, col3 = st.columns([1, 2, 1])
+
+    with col2:
+        with st.form("form_recomendador"):
+            col_izq, col_der = st.columns(2)
+            with col_izq:
+                presupuesto = st.number_input(
+                    "Presupuesto (USD)",
+                    min_value=0,
+                    value=4000,
+                    step=100,
+                )
+                uso = st.selectbox("Uso", ["Pasajeros", "Carga"])
+            with col_der:
+                tipo = st.selectbox(
+                    "Tipo",
+                    ["Me da igual", "Eléctrico", "Combustible", "Híbrido"],
+                )
+                prioridad = st.selectbox(
+                    "Prioridad", ["Precio", "Autonomía", "Capacidad"]
+                )
+            solo_en_stock = st.checkbox(
+                "Solo mostrar triciclos en stock"
+            )
+            enviado = st.form_submit_button(
+                "Buscar", use_container_width=True
+            )
 
     # Guardamos los resultados en session_state para que sobrevivan a los
     # reruns de Streamlit y al cambio de pestañas.
@@ -103,26 +114,27 @@ with tab_recomendador:
                 "Prueba a subir el presupuesto o cambiar el uso/tipo."
             )
         else:
-            st.dataframe(
-                resultados,
-                width="stretch",
-                hide_index=True,
-                column_config={
-                    "marca": "Marca",
-                    "nombre_importadora": "Importadora",
-                    "precio_usd": st.column_config.NumberColumn(
-                        "Precio (USD)", format="$%.0f"
-                    ),
-                    "capacidad_carga_kg": st.column_config.NumberColumn(
-                        "Capacidad (kg)", format="%.0f kg"
-                    ),
-                    "autonomia_km": st.column_config.NumberColumn(
-                        "Autonomía (km)", format="%.0f km"
-                    ),
-                    "tipo": "Tipo",
-                    "url": st.column_config.LinkColumn("Enlace"),
-                },
-            )
+            with st.container():
+                st.dataframe(
+                    resultados,
+                    width="stretch",
+                    hide_index=True,
+                    column_config={
+                        "marca": "Marca",
+                        "nombre_importadora": "Importadora",
+                        "precio_usd": st.column_config.NumberColumn(
+                            "Precio (USD)", format="$%.0f"
+                        ),
+                        "capacidad_carga_kg": st.column_config.NumberColumn(
+                            "Capacidad (kg)", format="%.0f kg"
+                        ),
+                        "autonomia_km": st.column_config.NumberColumn(
+                            "Autonomía (km)", format="%.0f km"
+                        ),
+                        "tipo": "Tipo",
+                        "url": st.column_config.LinkColumn("Enlace"),
+                    },
+                )
 
 with tab_mercado:
     st.markdown(
