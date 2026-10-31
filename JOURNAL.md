@@ -228,3 +228,19 @@ Descartados finales: 124, con distribución:
 **Artefactos:** `scripts/clustering_importadoras.py`, `scripts/clustering_encuestas.py`, `scripts/eda_catalogos.py`, `scripts/insights_encuestas.py`, `scripts/eda_global.py`, `data/processed/clustering_importadoras/dw_clusters_importadoras.csv`, `data/processed/clustering_encuestas/dw_clusters_encuestas.csv`, `data/processed/encuestas_eda/dw_documentos.csv`, `data/processed/encuestas_eda/dw_fallas_marcas.csv`, `docs/insights_encuestas.md`, `docs/eda_global.md`, `docs/graficos_eda/` (4 PNG).
 
 **Próximo:** Crear gráficos en Datawrapper y redactar el informe final.
+
+---
+
+## [2026-10-31 · sábado] DESPLIEGUE — Rediseño de UI y optimización de dependencias
+
+**Contexto:** Tras completar el EDA y el clustering, quedaba pendiente la capa de presentación. El primer intento de despliegue en Streamlit Cloud falló por falta de memoria al compilar `scipy` con Python 3.14.
+
+**Acción:** Rediseño de la UI en Streamlit (tarjetas, gráficos nativos, CSS personalizado). Reducción del `requirements.txt` para evitar el fallo OOM (Out of Memory) en Streamlit Cloud, separando las dependencias de desarrollo en `requirements-dev.txt`. Se fijó Python 3.11 en `runtime.txt` y se añadió `build-essential` en `packages.txt`. También se adaptó `app/recommend.py` para exponer `cargar_catalogo()`, aceptar el catálogo ya cargado y devolver las columnas que consumen las tarjetas.
+
+**Resultado:** App desplegada exitosamente con el nuevo diseño. La interfaz incluye hero, tarjetas de resultados, badges, chips, gráficos nativos (`st.bar_chart`, `st.scatter_chart`) y CSS personalizado. El runtime quedó reducido a `pandas` y `streamlit`, mientras que las dependencias pesadas del pipeline se conservan en `requirements-dev.txt`.
+
+**Lección:** Separar las dependencias de la app de las del pipeline evita compilaciones pesadas e innecesarias en el despliegue. Fijar la versión de Python y validar la API entre la UI y el motor de recomendación antes de desplegar ahorra fallos en producción.
+
+**Artefactos:** `app/streamlit_app.py`, `app/recommend.py`, `requirements.txt`, `requirements-dev.txt`, `runtime.txt`, `packages.txt`, `.streamlit/config.toml`.
+
+**Próximo:** Integrar los gráficos de Datawrapper en la pestaña "Entiende el Mercado" y redactar `docs/informe_final.md`.

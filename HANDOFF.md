@@ -1,9 +1,9 @@
 # HANDOFF — Revolico Triciclos
 
 **Asignación del proyecto (clase):** sábado 2026-09-26
-**Última actualización:** domingo 2026-10-18
+**Última actualización:** sábado 2026-10-31
 **Responsable:** diegogonza
-**Estado general:** Scraping COMPLETADO. Meta superada. Fase de normalización + estudio de mercado. Reorganización de archivos COMPLETADA.
+**Estado general:** App MVP DESPLEGADA y funcional en Streamlit Cloud. Rediseño visual completado (tarjetas, gráficos nativos, CSS personalizado). Scraping y análisis de datos COMPLETADOS. Pendiente: integrar Datawrapper y redactar el informe final.
 
 ---
 
@@ -35,6 +35,9 @@ Extraer anuncios de **triciclos** de Revolico.com (Vehículos > Motos Eléctrica
 - **Duplicados detectados** (por `(gcsKey, phone)`): 12 grupos / 24 registros → **757 tras dedup** (ya aplicado en `data/processed/triciclos_aceptados_normalizado.json`; `data/processed/duplicados_descartados.json` registra los descartes).
 - Cloudflare resuelto con perfil persistente `chrome_profile_revolico/` + `DISPLAY=:0` + Chrome real.
 - **Reorganización (2026-10-18):** raíz limpia; scripts de scraping en `scraping/`, crudos y backups en `scraping/data/`, informe en `docs/`, datos limpios en `data/`. Rutas de los scripts ajustadas (backups en `scraping/data/*.bak.20261018_123614`).
+- **App MVP (2026-10-31):** desplegada y funcional en Streamlit Cloud. Nuevo diseño con hero, tarjetas, gráficos nativos (`st.bar_chart`, `st.scatter_chart`) y CSS personalizado.
+- **Despliegue optimizado:** `requirements.txt` reducido a `pandas` + `streamlit`; dependencias pesadas del pipeline en `requirements-dev.txt`; `runtime.txt` fija Python 3.11; `packages.txt` incluye `build-essential`.
+- **API de recomendación:** `app/recommend.py` expone `cargar_catalogo()`, acepta `catalogo=` y devuelve `modelo`, `disponibilidad`, `tiene_panel_solar` y `fecha_scraping` para las tarjetas.
 
 ---
 
@@ -48,38 +51,32 @@ Extraer anuncios de **triciclos** de Revolico.com (Vehículos > Motos Eléctrica
 - Chrome + perfil persistente funcionando contra Cloudflare.
 - `scripts/normalizar.py` apunta a `scraping/data/revolico_state_p*.json` para el índice de dedup.
 - `scripts/analisis_mercado.py` escribe el informe en `docs/informe_mercado.md` (`drivers_precio.py` lo importa).
+- `app/streamlit_app.py` — UI rediseñada y desplegada en Streamlit Cloud.
+- `app/recommend.py` — motor de recomendación con API compatible con las tarjetas.
+- `requirements.txt` (runtime mínimo) y `requirements-dev.txt` (pipeline pesado).
 
 ### Completado
 - Scraping p1–p90. Meta 500 superada (769 → 757 con dedup).
 - Detección de duplicados con `scripts/check_duplicados.py`.
 - Reorganización de archivos (raíz limpia, `scraping/`, `docs/`).
+- Rediseño de la UI y despliegue exitoso en Streamlit Cloud (2026-10-31).
 
 ### En progreso / pendiente
-- Normalización de datos (monedas, precios a valores comparables, ubicaciones, marcas).
-- Estudio de mercado (distribución por provincia, marca, tipo, rango de precios).
-- Decidir si se commitea la reorganización (git tiene los renombres staged + cambios de la sesión anterior sin commitear).
+- Integrar los gráficos de Datawrapper en la pestaña "Entiende el Mercado".
+- Redactar `docs/informe_final.md` con los resultados del análisis.
 
 ---
 
 ## 4. Bloqueante actual
 
-**No hay bloqueante.** El scraping se detuvo por decisión, no por fallo técnico. Cloudflare está resuelto (perfil + DISPLAY=:0). La fase de normalización/estudio puede avanzar sin depender de nada externo.
+**No hay bloqueante.** La app MVP está desplegada y funcional en Streamlit Cloud. El despliegue quedó optimizado con Python 3.11 y un `requirements.txt` mínimo. El análisis de datos está completado; solo queda la capa de visualización e informe final.
 
 ---
 
 ## 5. Próximos pasos ordenados
 
-1. **Normalización** de `data/raw/triciclos_aceptados.json` (continuar en `scripts/normalizar.py`):
-   - Unificar monedas (CUP/USD/MLC/MN) y calcular equivalente de referencia.
-   - Normalizar marcas (variantes de escritura → nombre canónico).
-   - Normalizar ubicaciones (provincia/municipio).
-   - Validar tipos: eléctrico / combustible / híbrido.
-2. **Estudio de mercado** (continuar en `scripts/analisis_mercado.py` + `scripts/drivers_precio.py`):
-   - Distribución por provincia, marca, tipo de triciclo.
-   - Rango y mediana de precios (por moneda y equivalente).
-   - Autonomías declaradas.
-   - Informe final (markdown + tablas) en `docs/informe_mercado.md`.
-3. **Commit** de la reorganización cuando el usuario lo pida.
+1. **Integrar Datawrapper** en la pestaña "Entiende el Mercado" con los CSVs exportados (`dw_tipos`, `dw_precios_importadora`, `dw_precio_tipo`, etc.).
+2. **Redactar `docs/informe_final.md`** con los resultados del scraping, EDA, clustering y las conclusiones del estudio.
 
 ---
 
@@ -107,6 +104,13 @@ python scripts/analisis_mercado.py   # escribe docs/informe_mercado.md
 - `data/processed/triciclos_aceptados_normalizado.json` — 757 aceptados (post-dedup).
 - `data/processed/duplicados_descartados.json` — 24 duplicados descartados.
 - `docs/informe_mercado.md` — informe de mercado.
+- `app/streamlit_app.py` — UI rediseñada y desplegada en Streamlit Cloud.
+- `app/recommend.py` — motor de recomendación (`cargar_catalogo`, `recomendar_triciclo`).
+- `.streamlit/config.toml` — tema base de Streamlit.
+- `requirements.txt` — dependencias mínimas del runtime (`pandas`, `streamlit`).
+- `requirements-dev.txt` — dependencias pesadas del pipeline (`scipy`, `scikit-learn`, etc.).
+- `runtime.txt` — Python 3.11 para Streamlit Cloud.
+- `packages.txt` — `build-essential` para el entorno de despliegue.
 - `scripts/check_duplicados.py`, `scripts/normalizar.py`, `scripts/analisis_mercado.py`, `scripts/drivers_precio.py` — análisis e informe.
 - `chrome_profile_revolico/` — perfil persistente que resuelve Cloudflare.
 - `scraping/scraper_revolico_nodriver.py`, `scraping/prefetch_descripciones_nodriver.py` — scraping con Chrome real.
@@ -143,17 +147,15 @@ python scripts/analisis_mercado.py   # escribe docs/informe_mercado.md
 | 2026-10-06 14:25 | witty-comet | revolico-triciclos | Scraping a JSON |
 | 2026-10-06 14:25 | brave-planet | revolico-triciclos | Scrape 2 páginas (subagente) |
 | 2026-10-17 | (sesión anterior) | revolico-triciclos | Scraping p61-90 + pipeline 769 + reorganización scripts/ |
-| 2026-10-18 | (esta sesión) | revolico-triciclos | Reorganización final: scraping/, docs/, raíz limpia + ajuste de rutas |
+| 2026-10-18 | (sesión anterior) | revolico-triciclos | Reorganización final: scraping/, docs/, raíz limpia + ajuste de rutas |
+| 2026-10-31 | (sesión de rediseño) | revolico-triciclos | Rediseño UI + despliegue en Streamlit Cloud + requirements optimizado |
 
-## Actualización 2026-10-24 (Fase de Ciencia de Datos completada)
+## Actualización 2026-10-31 (App MVP desplegada)
 
-- **Estado general:** Fase de Ciencia de Datos 100% completada y auditada. Clustering, EDA de encuestas e EDA global finalizados. Datos listos para visualización.
-- **Análisis completados:**
-  - Clustering importadoras: k=3 (combustión premium / eléctricos carga media / híbridos económicos)
-  - Clustering encuestas: k=2 (propietarios eléctricos alto presupuesto / híbridos mixto)
-  - Insights encuestas (Bloques A/B/C) con CSVs para Datawrapper
-  - EDA global con comparativas, autonomía, marcas/batería corregida y correlaciones
+- **Estado general:** App MVP desplegada y funcional en Streamlit Cloud con el nuevo diseño.
+- **UI:** hero, tarjetas de resultados, badges, chips, gráficos nativos y CSS personalizado.
+- **Despliegue:** `requirements.txt` mínimo para evitar OOM; `requirements-dev.txt` conserva las dependencias pesadas; Python 3.11 fijado en `runtime.txt`.
+- **Datos:** 757 anuncios analizados, 32 modelos de importadoras y 40 respuestas de encuesta.
 - **Próximos pasos:**
-  1. **Crear gráficos en Datawrapper** con los CSVs exportados.
-  2. **Generar el informe final** con `scripts/generar_informe.py` (pendiente de ejecutar cuando esté listo).
-  3. **App de Streamlit** es lo último pendiente.
+  1. Integrar los gráficos de Datawrapper en la pestaña "Entiende el Mercado".
+  2. Redactar `docs/informe_final.md`.
