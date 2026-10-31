@@ -17,11 +17,15 @@ RUTA_CATALOGO = (
 # Columnas exactas que consume la aplicación web.
 COLUMNAS_SALIDA = [
     "marca",
+    "modelo",
     "nombre_importadora",
     "precio_usd",
     "capacidad_carga_kg",
     "autonomia_km",
     "tipo",
+    "tiene_panel_solar",
+    "disponibilidad",
+    "fecha_scraping",
     "url",
 ]
 
@@ -39,7 +43,7 @@ def _normalizar_texto(valor):
     return " ".join(texto.split())
 
 
-def _cargar_catalogo():
+def cargar_catalogo():
     """Lee el catálogo y fuerza la capacidad de carga a numérico."""
     if not RUTA_CATALOGO.exists():
         raise FileNotFoundError(f"No se encontró el catálogo: {RUTA_CATALOGO}")
@@ -61,6 +65,7 @@ def recomendar_triciclo(
     tipo_preferido,
     prioridad,
     solo_en_stock,
+    catalogo=None,
 ):
     """Devuelve el Top 3 de triciclos según los criterios del usuario.
 
@@ -70,11 +75,14 @@ def recomendar_triciclo(
         tipo_preferido: "Eléctrico", "Combustible", "Híbrido" o "Me da igual".
         prioridad: "Precio", "Autonomía" o "Capacidad".
         solo_en_stock: si es True, solo incluye unidades disponibles.
+        catalogo: DataFrame opcional ya cargado. Si es None, se lee del CSV.
 
     Retorna un DataFrame con las columnas de COLUMNAS_SALIDA. Si no hay
     coincidencias, retorna un DataFrame vacío con esas mismas columnas.
     """
-    df = _cargar_catalogo().copy()
+    df = (
+        catalogo.copy() if catalogo is not None else cargar_catalogo().copy()
+    )
 
     # Filtro por presupuesto. Los precios nulos quedan fuera al comparar.
     if presupuesto is not None:
