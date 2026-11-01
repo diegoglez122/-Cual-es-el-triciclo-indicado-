@@ -244,3 +244,13 @@ Descartados finales: 124, con distribución:
 **Artefactos:** `app/streamlit_app.py`, `app/recommend.py`, `requirements.txt`, `requirements-dev.txt`, `runtime.txt`, `packages.txt`, `.streamlit/config.toml`.
 
 **Próximo:** Integrar los gráficos de Datawrapper en la pestaña "Entiende el Mercado" y redactar `docs/informe_final.md`.
+
+## [2026-10-31] Rediseño de UI y optimización del despliegue
+
+**Contexto:** Tras el feedback del profesor sobre la falta de evolución diaria, y con el objetivo de mejorar la experiencia de usuario del MVP, decidimos rediseñar la interfaz.
+**Acción:** 
+- Se implementó un rediseño completo en Streamlit (tarjetas HTML/CSS, nuevo header, gráficos nativos).
+- Se optimizó el `requirements.txt` de la app, separando las dependencias pesadas del pipeline (guardadas en `requirements-dev.txt`) para dejar solo `pandas` y `streamlit`. Esto solucionó el fallo de memoria (OOM) en el despliegue.
+- Se desplegó con éxito la aplicación en Streamlit Community Cloud.
+**Resultado:** App funcional, estética y pública en https://triciclo-indicado.streamlit.app/
+**Próximo:** Integrar datos de Revolico en el recomendador y redactar el informe final.

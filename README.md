@@ -18,3 +18,9 @@ Proyecto de ciencia de datos para analizar el mercado de triciclos en Cuba, basa
 - 769 registros extraídos.
 - 757 registros únicos normalizados.
 - 12 duplicados descartados.
+
+## 🚀 Aplicación Web (MVP)
+La aplicación interactiva con el recomendador de triciclos está desplegada y disponible en:
+**[https://triciclo-indicado.streamlit.app/](https://triciclo-indicado.streamlit.app/)**
+
+*Nota: Si la app está inactiva, puede tardar unos segundos en despertar.*
