@@ -12,6 +12,7 @@ if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
 from app.recommend import cargar_catalogo, recomendar_triciclo
+from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
 
 ANUNCIOS_ANALIZADOS = 757
 RESPUESTAS_ENCUESTA = 40
@@ -77,22 +78,46 @@ html, body, .stApp, [data-testid="stMarkdownContainer"], .hero, .card {
 """
 st.markdown(ESTILOS, unsafe_allow_html=True)
 
+
 @st.cache_data(show_spinner=False)
 def obtener_catalogo():
     return cargar_catalogo()
 
+
+TIPOS = {
+    "electrico": "Eléctrico", "eléctrico": "Eléctrico",
+    "combustion": "Combustión", "combustión": "Combustión",
+    "hibrido": "Híbrido", "híbrido": "Híbrido",
+}
+DISPONIBILIDAD = {"en stock": "En stock", "desconocido": "Disponibilidad no confirmada"}
+
+
+@st.cache_data(show_spinner=False)
+def obtener_anuncios():
+    return cargar_anuncios()
+
+
 def etiqueta(valor):
     if pd.isna(valor):
         return ""
-    return str(valor).replace("_", " ").strip().capitalize()
+    texto = str(valor).replace("_", " ").strip()
+    clave = texto.lower()
+    if clave in TIPOS:
+        return TIPOS[clave]
+    if clave in DISPONIBILIDAD:
+        return DISPONIBILIDAD[clave]
+    return texto.capitalize() if texto.islower() else texto
+
 
 def dato(valor, formato):
     if pd.isna(valor):
         return '<b class="nd">No disponible</b>'
     return f"<b>{formato.format(valor)}</b>"
 
+
 def es_verdadero(valor):
     return str(valor).strip().lower() in {"true", "1", "si", "sí", "yes"}
+
 
 def tarjeta_html(fila, destacada):
     modelo = escape(str(fila["modelo"])) if pd.notna(fila["modelo"]) else "Modelo sin nombre"
@@ -127,6 +152,7 @@ def tarjeta_html(fila, destacada):
         f'</div></div>'
     )
 
+
 catalogo = obtener_catalogo()
 
 st.markdown(
@@ -142,7 +168,8 @@ tab_recomendador, tab_mercado, tab_metodologia = st.tabs(
     ["Recomendador", "Entiende el Mercado", "Metodología"]
 )
 
-with tab_recomendador:
+
+def vista_importadoras():
     with st.container(border=True):
         with st.form("form_recomendador", border=False):
             col_izq, col_der = st.columns(2)
@@ -159,7 +186,7 @@ with tab_recomendador:
                     "¿Qué te importa más?", ["Precio", "Autonomía", "Capacidad"], horizontal=True
                 )
             solo_en_stock = st.checkbox("Mostrar solo los que están en stock")
-            enviado = st.form_submit_button("Buscar triciclos", type="primary", use_container_width=True)
+            enviado = st.form_submit_button("Buscar triciclos", type="primary", width="stretch")
 
     if enviado:
         st.session_state["resultados"] = recomendar_triciclo(
@@ -211,6 +238,135 @@ with tab_recomendador:
             if not fechas.empty:
                 st.caption(f"Datos del catálogo al {fechas.max():%d/%m/%Y}. Los precios pueden cambiar.")
 
+
+def tarjeta_revolico_html(fila, destacada):
+    marca = escape(str(fila["marca_detectada"])) if pd.notna(fila["marca_detectada"]) else "Marca no indicada"
+    tipo = etiqueta(fila["tipo_triciclo"])
+    uso = etiqueta(fila["tipo_uso"])
+    lugar = ", ".join(
+        escape(str(v)) for v in (fila["municipio"], fila["ubicacion"]) if pd.notna(v)
+    ) or "Ubicación no indicada"
+
+    chips = []
+    if tipo:
+        chips.append(f'<span class="chip">{escape(tipo)}</span>')
+    if uso:
+        chips.append(f'<span class="chip">Uso: {escape(uso.lower())}</span>')
+
+    precio = "Precio no disponible" if pd.isna(fila["precio_publicado"]) else f"${fila['precio_publicado']:,.0f}"
+    badge = '<div class="badge">Mejor opción para tu prioridad</div>' if destacada else ""
+    clase_tarjeta = "card card-top" if destacada else "card"
+    if pd.isna(fila["fecha_publicacion"]):
+        fecha = '<b class="nd">No indicada</b>'
+    else:
+        fecha = f"<b>{fila['fecha_publicacion']:%d/%m/%Y}</b>"
+
+    return (
+        f'<div class="{clase_tarjeta}">{badge}'
+        f'<div class="card-head"><div>'
+        f'<div class="card-title">{marca}</div>'
+        f'<div class="card-sub">{lugar}</div></div>'
+        f'<div class="card-price">{precio}</div></div>'
+        f'<div class="chips">{"".join(chips)}</div>'
+        f'<div class="specs">'
+        f'<div><span>Autonomía</span>{dato(fila["autonomia_km"], "{:,.0f} km")}</div>'
+        f'<div><span>Batería</span>{dato(fila["voltaje_bateria"], "{:,.0f} V")}</div>'
+        f'<div><span>Publicado</span>{fecha}</div>'
+        f'</div></div>'
+    )
+
+
+def vista_revolico():
+    try:
+        anuncios = obtener_anuncios()
+    except FileNotFoundError:
+        st.error("No se encontró el archivo de anuncios de Revolico en data/processed/.")
+        return
+
+    st.caption(
+        "Anuncios de vendedores en Revolico. El precio y la disponibilidad "
+        "los fija cada vendedor: confirma todo antes de comprar."
+    )
+    provincias = ["Cualquiera"] + sorted(anuncios["ubicacion"].dropna().unique())
+
+    with st.container(border=True):
+        with st.form("form_revolico", border=False):
+            col_izq, col_der = st.columns(2)
+            with col_izq:
+                presupuesto = st.number_input(
+                    "Presupuesto máximo (USD)", min_value=0, value=4000, step=100, key="presupuesto_rev"
+                )
+                uso = st.radio(
+                    "¿Para qué lo vas a usar?", ["Pasajeros", "Carga"], horizontal=True, key="uso_rev"
+                )
+            with col_der:
+                tipo = st.selectbox(
+                    "Tipo de motor", ["Me da igual", "Eléctrico", "Híbrido"], key="tipo_rev"
+                )
+                provincia = st.selectbox("Provincia", provincias, key="provincia_rev")
+            prioridad = st.radio(
+                "¿Qué te importa más?",
+                ["Precio", "Autonomía", "Más recientes"],
+                horizontal=True,
+                key="prioridad_rev",
+            )
+            enviado = st.form_submit_button("Buscar anuncios", type="primary", width="stretch")
+
+    if enviado:
+        st.session_state["resultados_rev"] = recomendar_anuncios(
+            anuncios, presupuesto, uso, tipo, provincia, prioridad
+        )
+        st.session_state["criterios_rev"] = {
+            "presupuesto": presupuesto, "uso": uso, "tipo": tipo,
+            "provincia": provincia, "prioridad": prioridad,
+        }
+
+    criterios = st.session_state.get("criterios_rev")
+    if criterios is None:
+        st.info("Elige tus criterios y pulsa **Buscar anuncios** para ver hasta 5 opciones.")
+        return
+
+    resultados, total = st.session_state["resultados_rev"]
+    st.subheader("Anuncios que coinciden")
+    st.caption(
+        f"Hasta ${criterios['presupuesto']:,.0f} USD, para {criterios['uso'].lower()}, "
+        f"motor: {criterios['tipo'].lower()}, provincia: {criterios['provincia'].lower()}, "
+        f"prioridad: {criterios['prioridad'].lower()}."
+    )
+
+    if criterios["prioridad"] == "Autonomía":
+        con_dato = int(anuncios["autonomia_km"].notna().sum())
+        st.warning(
+            f"Solo {con_dato} de {len(anuncios)} anuncios indican la autonomía. "
+            "Los que no la indican aparecen al final."
+        )
+
+    if resultados.empty:
+        st.warning(
+            "No hay anuncios con esos criterios. Sube el presupuesto, "
+            "cambia el tipo de motor o elige otra provincia."
+        )
+        return
+
+    st.caption(f"Mostrando {len(resultados)} de {total} anuncios que cumplen los filtros.")
+    for i, (_, fila) in enumerate(resultados.iterrows()):
+        st.markdown(tarjeta_revolico_html(fila, destacada=(i == 0)), unsafe_allow_html=True)
+        enlace = fila.get("enlace")
+        if isinstance(enlace, str) and enlace.startswith("http"):
+            st.link_button("Ver anuncio en Revolico", enlace)
+        st.write("")
+
+
+with tab_recomendador:
+    fuente = st.radio(
+        "¿Dónde quieres buscar?", ["Importadoras", "Revolico"], horizontal=True, key="fuente"
+    )
+    if fuente == "Importadoras":
+        st.caption("Catálogo de importadoras, con precio y disponibilidad.")
+        vista_importadoras()
+    else:
+        vista_revolico()
+
 with tab_mercado:
     st.markdown(
         "Resumen de la oferta de las importadoras. Los gráficos de los anuncios de "
@@ -227,12 +383,12 @@ with tab_mercado:
     with col_a:
         st.markdown("**Modelos por tipo de motor**")
         por_tipo = catalogo["tipo"].map(etiqueta).value_counts()
-        st.bar_chart(por_tipo, color="#0E7C86", x_label="Tipo", y_label="Modelos")
+        st.bar_chart(por_tipo, color="#0E7C86", horizontal=True)
     with col_b:
         st.markdown("**Precio medio por importadora (USD)**")
         precio_medio = catalogo.groupby("nombre_importadora")["precio_usd"].mean().round(0)
         precio_medio.index = precio_medio.index.map(etiqueta)
-        st.bar_chart(precio_medio, color="#12263A", x_label="Importadora", y_label="USD")
+        st.bar_chart(precio_medio, color="#12263A", horizontal=True)
 
     st.markdown("**Precio frente a capacidad de carga**")
     puntos = catalogo.dropna(subset=["capacidad_carga_kg", "precio_usd"]).copy()
@@ -272,4 +428,4 @@ híbridos económicos. En las encuestas se obtuvieron 2 perfiles.
 st.markdown(
     '<div class="footer">Proyecto de Ciencia de Datos - 2026</div>',
     unsafe_allow_html=True,
-) 
+)
