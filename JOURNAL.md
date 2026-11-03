@@ -254,3 +254,13 @@ Descartados finales: 124, con distribución:
 - Se desplegó con éxito la aplicación en Streamlit Community Cloud.
 **Resultado:** App funcional, estética y pública en https://triciclo-indicado.streamlit.app/
 **Próximo:** Integrar datos de Revolico en el recomendador y redactar el informe final.
+
+## [2026-11-03] Integración del Mercado Informal (Revolico) y MVP final
+
+**Contexto:** La aplicación ya funcionaba con las importadoras, pero carecía de la visión del mercado informal. Se recibió un rediseño de UI y la lógica para integrar los 757 anuncios de Revolico.
+**Acción:** 
+- Se creó `app/recommend_revolico.py` con la lógica de filtrado para el mercado informal (por provincia, uso, tipo y precio).
+- Se actualizó `app/streamlit_app.py` para incluir un selector de fuente ("Importadoras" vs "Revolico") y tarjetas adaptadas a los datos de los vendedores (ubicación, fecha, autonomía).
+- Se optimizó el `requirements.txt` de la raíz para el despliegue (solo `pandas`, `streamlit` y `numpy`), moviendo las dependencias pesadas a `requirements-dev.txt` para evitar fallos de memoria en Streamlit Cloud.
+**Resultado:** MVP totalmente funcional y desplegado. La app compara el mercado formal y el informal, con un diseño de tarjetas profesional.
+**Próximo:** Integrar los gráficos de Datawrapper en la pestaña "Entiende el Mercado" y redactar el informe final.

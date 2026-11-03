@@ -159,3 +159,13 @@ python scripts/analisis_mercado.py   # escribe docs/informe_mercado.md
 - **Próximos pasos:**
   1. Integrar los gráficos de Datawrapper en la pestaña "Entiende el Mercado".
   2. Redactar `docs/informe_final.md`.
+
+## Actualización 2026-11-03 (MVP Completado y Desplegado)
+
+- **Estado general:** El MVP (Producto Mínimo Viable) está 100% funcional y desplegado en Streamlit Community Cloud (https://triciclo-indicado.streamlit.app/).
+- **Nuevas características:**
+  - El recomendador ahora permite alternar entre el catálogo de Importadoras (mercado formal) y los anuncios de Revolico (mercado informal).
+  - El despliegue se optimizó separando `requirements.txt` (ligero) de `requirements-dev.txt` (pesado).
+- **Próximos pasos:**
+  1. Insertar las imágenes PNG de los gráficos de Datawrapper en la pestaña "Entiende el Mercado" de la app.
+  2. Redactar el `informe_final.md` uniendo los hallazgos del EDA y las encuestas.
