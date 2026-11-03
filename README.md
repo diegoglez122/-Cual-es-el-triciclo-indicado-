@@ -1,3 +1,8 @@
+## 🌐 Demo en Vivo
+**Puedes probar la aplicación interactiva aquí:** [https://triciclo-indicado.streamlit.app/](https://triciclo-indicado.streamlit.app/)
+
+---
+
 # Estudio de Mercado: Triciclos en Cuba
 
 ## 📌 Descripción
