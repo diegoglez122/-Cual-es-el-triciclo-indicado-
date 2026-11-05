@@ -430,27 +430,22 @@ with tab_mercado:
 with tab_metodologia:
     st.markdown(
         """
-### Scraping
-Los datos de Revolico se extrajeron de la subcategoría de Motos Eléctricas
-y Triciclos. Se recorrieron las páginas 1 a 90 de un total de 253, obteniendo
-1378 anuncios únicos. Tras aplicar los filtros de calidad quedaron 769 anuncios aceptados
-y 609 descartados. Después de eliminar duplicados, el conjunto final quedó en 757 anuncios.
-El catálogo de importadoras reúne 32 modelos de MZ Products, Kikihabana y Nihao53.
+### 1. Web Scraping y Recolección de Datos
+Los datos de Revolico se extrajeron de la subcategoría de Motos Eléctricas y Triciclos mediante un script en Python (BeautifulSoup). Se recorrieron las páginas 1 a 90 (de un total de 253), obteniendo 1,378 anuncios únicos. 
+Tras aplicar los filtros de calidad y unificar marcas, quedaron **769 anuncios aceptados** y 609 descartados. Después de eliminar duplicados, el conjunto final quedó en **757 anuncios**. 
+Por otro lado, el catálogo de importadoras reúne **32 modelos** de MZ Products, Kikihabana y Nihao53, extraídos con técnicas similares.
 
-### KMeans
-Se aplicó clustering KMeans para segmentar la oferta. En importadoras se
-obtuvieron 3 segmentos: combustión premium, eléctricos de carga media e
-híbridos económicos. En las encuestas se obtuvieron 2 perfiles.
+### 2. Modelado con KMeans
+Se aplicó el algoritmo de clustering KMeans para segmentar el mercado y entender la oferta y la demanda:
+*   **En importadoras (k=3):** Se identificaron 3 segmentos de producto: Combustión Premium, Eléctricos de Carga Media e Híbridos Económicos.
+*   **En encuestas (k=2):** Se identificaron 2 perfiles de compradores: Propietarios eléctricos con alto presupuesto y Dueños de híbridos con perfil mixto.
 
-### Limitaciones de la muestra
-- El scraping cubre 90 de las 253 páginas de la categoría.
-- La autonomía solo está disponible en 4 de los 32 modelos.
-- La capacidad de carga falta en 10 de los 32 modelos.
-- La encuesta cuenta con 40 respuestas válidas.
+### 3. Limitaciones del Estudio
+Para garantizar la transparencia, se declaran las siguientes limitaciones:
+*   El scraping cubre 90 de las 253 páginas de la categoría (muestra no exhaustiva).
+*   La autonomía solo está disponible en 4 de los 32 modelos del catálogo formal.
+*   La capacidad de carga falta en 10 de los 32 modelos formales.
+*   La encuesta cuenta con 40 respuestas válidas, por lo que funciona como una fotografía representativa del mercado, pero no como un censo nacional.
+*   Los precios de Revolico son de oferta y pueden variar al momento del cierre de la compra.
 """
     )
-
-st.markdown(
-    '<div class="footer">Proyecto de Ciencia de Datos - 2026</div>',
-    unsafe_allow_html=True,
-)
