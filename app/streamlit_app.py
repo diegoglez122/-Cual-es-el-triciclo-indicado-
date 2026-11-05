@@ -369,8 +369,8 @@ with tab_recomendador:
 
 with tab_mercado:
     st.markdown(
-        "Resumen de la oferta de las importadoras. Los gráficos de los anuncios de "
-        "Revolico se añadirán cuando estén listos en Datawrapper."
+        "Resumen de la oferta de las importadoras y análisis del mercado informal. "
+        "Explora los hallazgos clave del estudio divididos en tres grandes bloques."
     )
 
     m1, m2, m3, m4 = st.columns(4)
@@ -379,28 +379,53 @@ with tab_mercado:
     m3.metric("Anuncios analizados", ANUNCIOS_ANALIZADOS)
     m4.metric("Respuestas de encuesta", RESPUESTAS_ENCUESTA)
 
-    col_a, col_b = st.columns(2)
-    with col_a:
-        st.markdown("**Modelos por tipo de motor**")
-        por_tipo = catalogo["tipo"].map(etiqueta).value_counts()
-        st.bar_chart(por_tipo, color="#0E7C86", horizontal=True)
-    with col_b:
-        st.markdown("**Precio medio por importadora (USD)**")
-        precio_medio = catalogo.groupby("nombre_importadora")["precio_usd"].mean().round(0)
-        precio_medio.index = precio_medio.index.map(etiqueta)
-        st.bar_chart(precio_medio, color="#12263A", horizontal=True)
+    st.divider()
 
-    st.markdown("**Precio frente a capacidad de carga**")
-    puntos = catalogo.dropna(subset=["capacidad_carga_kg", "precio_usd"]).copy()
-    puntos["tipo"] = puntos["tipo"].map(etiqueta)
-    st.scatter_chart(
-        puntos, x="capacidad_carga_kg", y="precio_usd", color="tipo",
-        x_label="Capacidad de carga (kg)", y_label="Precio (USD)",
-    )
-    st.caption(
-        f"Se muestran {len(puntos)} de {len(catalogo)} modelos: "
-        "los demás no tienen capacidad de carga registrada."
-    )
+    # --- BLOQUE 1: PRECIOS Y TECNOLOGÍA ---
+    st.subheader("1. El Mercado y los Precios")
+    st.markdown("El mercado informal es significativamente más caro que importar directamente. Además, la tecnología eléctrica domina el catálogo formal.")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image("docs/grafico_01_precios.png", use_container_width=True)
+        st.caption("El mercado informal (Revolico) es 20% más caro que las importadoras.")
+    with col2:
+        st.image("docs/grafico_08_tipos.png", use_container_width=True)
+        st.caption("El 68% de los triciclos en las importadoras son eléctricos.")
+
+    st.divider()
+
+    # --- BLOQUE 2: EL DÍA A DÍA Y LA FORMALIDAD ---
+    st.subheader("2. Fallas y Formalidad Legal")
+    st.markdown("El mayor dolor de cabeza de los dueños son las gomas y la batería. A nivel legal, la mayoría opera con solo 2 documentos, lo que refleja un alto nivel de informalidad.")
+    
+    col3, col4, col5 = st.columns(3)
+    with col3:
+        st.image("docs/grafico_02_fallas.png", use_container_width=True)
+        st.caption("Fallas mecánicas reportadas por los 40 encuestados.")
+    with col4:
+        st.image("docs/grafico_03_documentos.png", use_container_width=True)
+        st.caption("Cantidad de documentos legales que poseen los choferes.")
+    with col5:
+        st.image("docs/grafico_06_clusters_imp.png", use_container_width=True)
+        st.caption("Los 3 segmentos de precios del mercado formal.")
+
+    st.divider()
+
+    # --- BLOQUE 3: IMPACTO Y PERFILES ---
+    st.subheader("3. Impacto Externo y Perfil del Comprador")
+    st.markdown("La competencia estatal está afectando la rentabilidad, y el análisis de Machine Learning revela que el mercado está dominado por un perfil muy claro: dueños de eléctricos con alto presupuesto.")
+    
+    col6, col7, col8 = st.columns(3)
+    with col6:
+        st.image("docs/grafico_04_afectados.png", use_container_width=True)
+        st.caption("37.5% de los encuestados se siente afectado por triciclos estatales.")
+    with col7:
+        st.image("docs/grafico_05_ganancias.png", use_container_width=True)
+        st.caption("De los afectados, el 66% reporta ganancias a la baja.")
+    with col8:
+        st.image("docs/grafico_07_clusters_cli.png", use_container_width=True)
+        st.caption("El 89% de los compradores encuestados son propietarios de eléctricos.")
 
 with tab_metodologia:
     st.markdown(
