@@ -1,5 +1,5 @@
 ## 🌐 Demo en Vivo
-**Puedes probar la aplicación interactiva aquí:** [https://triciclo-indicado.streamlit.app/](https://triciclo-indicado.streamlit.app/)
+**Puedes probar la aplicación interactiva aquí:** [https://cual-es-el-triciclo-indicado.onrender.com](https://cual-es-el-triciclo-indicado.onrender.com)
 
 ---
 
@@ -26,6 +26,6 @@ Proyecto de ciencia de datos para analizar el mercado de triciclos en Cuba, basa
 
 ## 🚀 Aplicación Web (MVP)
 La aplicación interactiva con el recomendador de triciclos está desplegada y disponible en:
-**[https://triciclo-indicado.streamlit.app/](https://triciclo-indicado.streamlit.app/)**
+**[https://cual-es-el-triciclo-indicado.onrender.com](https://cual-es-el-triciclo-indicado.onrender.com)**
 
 *Nota: Si la app está inactiva, puede tardar unos segundos en despertar.*
