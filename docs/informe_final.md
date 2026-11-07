@@ -74,14 +74,14 @@ Durante el desarrollo del proyecto se presentaron desafíos técnicos que requir
 
 ### Visualizaciones
 A continuación se presentan los gráficos generados a partir de los datos:
-![Precios comparativos](grafico_01_precios.png)
-![Tipos de triciclos](grafico_08_tipos.png)
-![Fallas mecánicas](grafico_02_fallas.png)
-![Documentos legales](grafico_03_documentos.png)
-![Afectados por estatales](grafico_04_afectados.png)
-![Impacto en ganancias](grafico_05_ganancias.png)
-![Clústeres de importadoras](grafico_06_clusters_imp.png)
-![Clústeres de clientes](grafico_07_clusters_cli.png)
+![Precios comparativos](imagenes/grafico_01_precios.png)
+![Tipos de triciclos](imagenes/grafico_08_tipos.png)
+![Fallas mecánicas](imagenes/grafico_02_fallas.png)
+![Documentos legales](imagenes/grafico_03_documentos.png)
+![Afectados por estatales](imagenes/grafico_04_afectados.png)
+![Impacto en ganancias](imagenes/grafico_05_ganancias.png)
+![Clústeres de importadoras](imagenes/grafico_06_clusters_imp.png)
+![Clústeres de clientes](imagenes/grafico_07_clusters_cli.png)
 ## 6. Conclusiones
 Comprar un triciclo en Cuba es una decisión financiera compleja. Los datos demuestran que, aunque importar sale un 20% más barato que comprar en el mercado informal, la falta de acceso a divisas y la burocracia empujan a los cubanos a pagar sobreprecios en el mercado local.
 

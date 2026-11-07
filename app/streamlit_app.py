@@ -387,10 +387,10 @@ with tab_mercado:
     
     col1, col2 = st.columns(2)
     with col1:
-        st.image("docs/grafico_01_precios.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_01_precios.png", use_container_width=True)
         st.caption("El mercado informal (Revolico) es 20% más caro que las importadoras.")
     with col2:
-        st.image("docs/grafico_08_tipos.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_08_tipos.png", use_container_width=True)
         st.caption("El 68% de los triciclos en las importadoras son eléctricos.")
 
     st.divider()
@@ -401,13 +401,13 @@ with tab_mercado:
     
     col3, col4, col5 = st.columns(3)
     with col3:
-        st.image("docs/grafico_02_fallas.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_02_fallas.png", use_container_width=True)
         st.caption("Fallas mecánicas reportadas por los 40 encuestados.")
     with col4:
-        st.image("docs/grafico_03_documentos.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_03_documentos.png", use_container_width=True)
         st.caption("Cantidad de documentos legales que poseen los choferes.")
     with col5:
-        st.image("docs/grafico_06_clusters_imp.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_06_clusters_imp.png", use_container_width=True)
         st.caption("Los 3 segmentos de precios del mercado formal.")
 
     st.divider()
@@ -418,13 +418,13 @@ with tab_mercado:
     
     col6, col7, col8 = st.columns(3)
     with col6:
-        st.image("docs/grafico_04_afectados.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_04_afectados.png", use_container_width=True)
         st.caption("37.5% de los encuestados se siente afectado por triciclos estatales.")
     with col7:
-        st.image("docs/grafico_05_ganancias.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_05_ganancias.png", use_container_width=True)
         st.caption("De los afectados, el 66% reporta ganancias a la baja.")
     with col8:
-        st.image("docs/grafico_07_clusters_cli.png", use_container_width=True)
+        st.image("docs/imagenes/grafico_07_clusters_cli.png", use_container_width=True)
         st.caption("El 89% de los compradores encuestados son propietarios de eléctricos.")
 
 with tab_metodologia:
