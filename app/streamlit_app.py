@@ -24,6 +24,20 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+
+ga_code = """
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4ESHEVRDF2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4ESHEVRDF2');
+</script>
+"""
+st.markdown(ga_code, unsafe_allow_html=True)
+
 ESTILOS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
