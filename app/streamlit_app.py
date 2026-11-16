@@ -1,7 +1,5 @@
 """Interfaz web en Streamlit para el recomendador de triciclos."""
 
-from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
-from app.recommend import cargar_catalogo, recomendar_triciclo
 import sys
 from pathlib import Path
 from html import escape
@@ -15,9 +13,10 @@ RAIZ = Path(__file__).resolve().parent.parent
 if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
-# 2. Ahora sí, Python ya sabe dónde buscar 'app'
-from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
 from app.recommend import cargar_catalogo, recomendar_triciclo
+from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
+
+# 2. Ahora sí, Python ya sabe dónde buscar 'app'
 
 
 
