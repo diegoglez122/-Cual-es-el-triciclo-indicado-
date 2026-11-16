@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+import streamlit_analytics2 as sa2
 
 RAIZ = Path(__file__).resolve().parent.parent
 if str(RAIZ) not in sys.path:
@@ -24,442 +25,433 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-
-ga_code = """
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4ESHEVRDF2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4ESHEVRDF2');
-</script>
-"""
-st.markdown(ga_code, unsafe_allow_html=True)
-
-ESTILOS = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-:root {
-    --ink: #12263A; --teal: #0E7C86; --sun: #F2B705;
-    --mute: #5B6B7A; --line: #DCE3E8; --surface: #FFFFFF;
-}
-html, body, .stApp, [data-testid="stMarkdownContainer"], .hero, .card {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-}
-.block-container { max-width: 1080px; padding-top: 1.5rem; }
-#MainMenu, footer { visibility: hidden; }
-
-.hero {
-    background: var(--ink); border-radius: 18px;
-    border-bottom: 6px solid var(--sun);
-    padding: 2rem 1.75rem; margin-bottom: 1.25rem;
-}
-.hero-title { color: #FFFFFF; font-weight: 800; font-size: 2.2rem; line-height: 1.15; }
-.hero-text { color: #C9D6E2; margin-top: .5rem; max-width: 52ch; font-size: 1.02rem; line-height: 1.5; }
-
-.card {
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: 14px; padding: 1.1rem 1.2rem; margin-bottom: .5rem;
-}
-.card-top { border-left: 6px solid var(--sun); }
-.badge {
-    display: inline-block; background: var(--sun); color: var(--ink);
-    font-weight: 700; font-size: .78rem; border-radius: 999px;
-    padding: .15rem .65rem; margin-bottom: .5rem;
-}
-.card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
-.card-title { font-size: 1.2rem; font-weight: 800; color: var(--ink); }
-.card-sub { color: var(--mute); font-size: .9rem; }
-.card-price { font-size: 1.6rem; font-weight: 800; color: var(--teal); }
-.chips { margin: .6rem 0 .8rem; display: flex; gap: .4rem; flex-wrap: wrap; }
-.chip { background: #E6F2F3; color: #0A5C64; border-radius: 999px; padding: .15rem .65rem; font-size: .8rem; font-weight: 600; }
-.chip-warn { background: #FFF3CD; color: #7A5B00; }
-.specs {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: .75rem; border-top: 1px solid var(--line); padding-top: .75rem;
-}
-.specs span { display: block; color: var(--mute); font-size: .78rem; }
-.specs b { color: var(--ink); font-size: 1.05rem; }
-.specs b.nd { color: var(--mute); font-weight: 400; font-size: .95rem; }
-
-.footer {
-    margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line);
-    text-align: center; color: var(--mute); font-size: .85rem;
-}
-</style>
-"""
-st.markdown(ESTILOS, unsafe_allow_html=True)
+with sa2.track(events_path="analytics.json"):
 
 
-@st.cache_data(show_spinner=False)
-def obtener_catalogo():
-    return cargar_catalogo()
+
+    ESTILOS = """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+    :root {
+        --ink: #12263A; --teal: #0E7C86; --sun: #F2B705;
+        --mute: #5B6B7A; --line: #DCE3E8; --surface: #FFFFFF;
+    }
+    html, body, .stApp, [data-testid="stMarkdownContainer"], .hero, .card {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    }
+    .block-container { max-width: 1080px; padding-top: 1.5rem; }
+    #MainMenu, footer { visibility: hidden; }
+
+    .hero {
+        background: var(--ink); border-radius: 18px;
+        border-bottom: 6px solid var(--sun);
+        padding: 2rem 1.75rem; margin-bottom: 1.25rem;
+    }
+    .hero-title { color: #FFFFFF; font-weight: 800; font-size: 2.2rem; line-height: 1.15; }
+    .hero-text { color: #C9D6E2; margin-top: .5rem; max-width: 52ch; font-size: 1.02rem; line-height: 1.5; }
+
+    .card {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 14px; padding: 1.1rem 1.2rem; margin-bottom: .5rem;
+    }
+    .card-top { border-left: 6px solid var(--sun); }
+    .badge {
+        display: inline-block; background: var(--sun); color: var(--ink);
+        font-weight: 700; font-size: .78rem; border-radius: 999px;
+        padding: .15rem .65rem; margin-bottom: .5rem;
+    }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+    .card-title { font-size: 1.2rem; font-weight: 800; color: var(--ink); }
+    .card-sub { color: var(--mute); font-size: .9rem; }
+    .card-price { font-size: 1.6rem; font-weight: 800; color: var(--teal); }
+    .chips { margin: .6rem 0 .8rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+    .chip { background: #E6F2F3; color: #0A5C64; border-radius: 999px; padding: .15rem .65rem; font-size: .8rem; font-weight: 600; }
+    .chip-warn { background: #FFF3CD; color: #7A5B00; }
+    .specs {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: .75rem; border-top: 1px solid var(--line); padding-top: .75rem;
+    }
+    .specs span { display: block; color: var(--mute); font-size: .78rem; }
+    .specs b { color: var(--ink); font-size: 1.05rem; }
+    .specs b.nd { color: var(--mute); font-weight: 400; font-size: .95rem; }
+
+    .footer {
+        margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line);
+        text-align: center; color: var(--mute); font-size: .85rem;
+    }
+    </style>
+    """
+    st.markdown(ESTILOS, unsafe_allow_html=True)
 
 
-TIPOS = {
-    "electrico": "Eléctrico", "eléctrico": "Eléctrico",
-    "combustion": "Combustión", "combustión": "Combustión",
-    "hibrido": "Híbrido", "híbrido": "Híbrido",
-}
-DISPONIBILIDAD = {"en stock": "En stock", "desconocido": "Disponibilidad no confirmada"}
+    @st.cache_data(show_spinner=False)
+    def obtener_catalogo():
+        return cargar_catalogo()
 
 
-@st.cache_data(show_spinner=False)
-def obtener_anuncios():
-    return cargar_anuncios()
+    TIPOS = {
+        "electrico": "Eléctrico", "eléctrico": "Eléctrico",
+        "combustion": "Combustión", "combustión": "Combustión",
+        "hibrido": "Híbrido", "híbrido": "Híbrido",
+    }
+    DISPONIBILIDAD = {"en stock": "En stock", "desconocido": "Disponibilidad no confirmada"}
 
 
-def etiqueta(valor):
-    if pd.isna(valor):
-        return ""
-    texto = str(valor).replace("_", " ").strip()
-    clave = texto.lower()
-    if clave in TIPOS:
-        return TIPOS[clave]
-    if clave in DISPONIBILIDAD:
-        return DISPONIBILIDAD[clave]
-    return texto.capitalize() if texto.islower() else texto
+    @st.cache_data(show_spinner=False)
+    def obtener_anuncios():
+        return cargar_anuncios()
 
 
-def dato(valor, formato):
-    if pd.isna(valor):
-        return '<b class="nd">No disponible</b>'
-    return f"<b>{formato.format(valor)}</b>"
+    def etiqueta(valor):
+        if pd.isna(valor):
+            return ""
+        texto = str(valor).replace("_", " ").strip()
+        clave = texto.lower()
+        if clave in TIPOS:
+            return TIPOS[clave]
+        if clave in DISPONIBILIDAD:
+            return DISPONIBILIDAD[clave]
+        return texto.capitalize() if texto.islower() else texto
 
 
-def es_verdadero(valor):
-    return str(valor).strip().lower() in {"true", "1", "si", "sí", "yes"}
+    def dato(valor, formato):
+        if pd.isna(valor):
+            return '<b class="nd">No disponible</b>'
+        return f"<b>{formato.format(valor)}</b>"
 
 
-def tarjeta_html(fila, destacada):
-    modelo = escape(str(fila["modelo"])) if pd.notna(fila["modelo"]) else "Modelo sin nombre"
-    importadora = escape(etiqueta(fila["nombre_importadora"]))
-    marca = escape(str(fila["marca"])) if pd.notna(fila["marca"]) else ""
-    subtitulo = importadora if not marca or marca == importadora else f"{importadora}, marca {marca}"
+    def es_verdadero(valor):
+        return str(valor).strip().lower() in {"true", "1", "si", "sí", "yes"}
 
-    chips = []
-    if pd.notna(fila["tipo"]):
-        chips.append(f'<span class="chip">{escape(etiqueta(fila["tipo"]))}</span>')
-    if pd.notna(fila["disponibilidad"]):
-        en_stock = str(fila["disponibilidad"]).strip().lower() in {"en stock", "in stock", "en_stock"}
-        clase = "chip" if en_stock else "chip chip-warn"
-        chips.append(f'<span class="{clase}">{escape(etiqueta(fila["disponibilidad"]))}</span>')
-    if es_verdadero(fila["tiene_panel_solar"]):
-        chips.append('<span class="chip">Panel solar</span>')
 
-    precio = "Precio no disponible" if pd.isna(fila["precio_usd"]) else f"${fila['precio_usd']:,.0f}"
-    badge = '<div class="badge">Mejor opción para tu prioridad</div>' if destacada else ""
-    clase_tarjeta = "card card-top" if destacada else "card"
+    def tarjeta_html(fila, destacada):
+        modelo = escape(str(fila["modelo"])) if pd.notna(fila["modelo"]) else "Modelo sin nombre"
+        importadora = escape(etiqueta(fila["nombre_importadora"]))
+        marca = escape(str(fila["marca"])) if pd.notna(fila["marca"]) else ""
+        subtitulo = importadora if not marca or marca == importadora else f"{importadora}, marca {marca}"
 
-    return (
-        f'<div class="{clase_tarjeta}">{badge}'
-        f'<div class="card-head"><div>'
-        f'<div class="card-title">{modelo}</div>'
-        f'<div class="card-sub">{subtitulo}</div></div>'
-        f'<div class="card-price">{precio}</div></div>'
-        f'<div class="chips">{"".join(chips)}</div>'
-        f'<div class="specs">'
-        f'<div><span>Capacidad de carga</span>{dato(fila["capacidad_carga_kg"], "{:,.0f} kg")}</div>'
-        f'<div><span>Autonomía</span>{dato(fila["autonomia_km"], "{:,.0f} km")}</div>'
-        f'</div></div>'
+        chips = []
+        if pd.notna(fila["tipo"]):
+            chips.append(f'<span class="chip">{escape(etiqueta(fila["tipo"]))}</span>')
+        if pd.notna(fila["disponibilidad"]):
+            en_stock = str(fila["disponibilidad"]).strip().lower() in {"en stock", "in stock", "en_stock"}
+            clase = "chip" if en_stock else "chip chip-warn"
+            chips.append(f'<span class="{clase}">{escape(etiqueta(fila["disponibilidad"]))}</span>')
+        if es_verdadero(fila["tiene_panel_solar"]):
+            chips.append('<span class="chip">Panel solar</span>')
+
+        precio = "Precio no disponible" if pd.isna(fila["precio_usd"]) else f"${fila['precio_usd']:,.0f}"
+        badge = '<div class="badge">Mejor opción para tu prioridad</div>' if destacada else ""
+        clase_tarjeta = "card card-top" if destacada else "card"
+
+        return (
+            f'<div class="{clase_tarjeta}">{badge}'
+            f'<div class="card-head"><div>'
+            f'<div class="card-title">{modelo}</div>'
+            f'<div class="card-sub">{subtitulo}</div></div>'
+            f'<div class="card-price">{precio}</div></div>'
+            f'<div class="chips">{"".join(chips)}</div>'
+            f'<div class="specs">'
+            f'<div><span>Capacidad de carga</span>{dato(fila["capacidad_carga_kg"], "{:,.0f} kg")}</div>'
+            f'<div><span>Autonomía</span>{dato(fila["autonomia_km"], "{:,.0f} km")}</div>'
+            f'</div></div>'
+        )
+
+
+    catalogo = obtener_catalogo()
+
+    st.markdown(
+        '<div class="hero">'
+        '<div class="hero-title">Triciclos Cuba</div>'
+        '<div class="hero-text">Compara triciclos de importadoras en Cuba según tu '
+        'presupuesto, el uso que le vas a dar y lo que más te importa.</div>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
+    tab_recomendador, tab_mercado, tab_metodologia = st.tabs(
+        ["Recomendador", "Entiende el Mercado", "Metodología"]
     )
 
 
-catalogo = obtener_catalogo()
+    def vista_importadoras():
+        with st.container(border=True):
+            with st.form("form_recomendador", border=False):
+                col_izq, col_der = st.columns(2)
+                with col_izq:
+                    presupuesto = st.number_input(
+                        "Presupuesto máximo (USD)", min_value=0, value=4000, step=100
+                    )
+                    uso = st.radio("¿Para qué lo vas a usar?", ["Pasajeros", "Carga"], horizontal=True)
+                with col_der:
+                    tipo = st.selectbox(
+                        "Tipo de motor", ["Me da igual", "Eléctrico", "Combustible", "Híbrido"]
+                    )
+                    prioridad = st.radio(
+                        "¿Qué te importa más?", ["Precio", "Autonomía", "Capacidad"], horizontal=True
+                    )
+                solo_en_stock = st.checkbox("Mostrar solo los que están en stock")
+                enviado = st.form_submit_button("Buscar triciclos", type="primary", width="stretch")
 
-st.markdown(
-    '<div class="hero">'
-    '<div class="hero-title">Triciclos Cuba</div>'
-    '<div class="hero-text">Compara triciclos de importadoras en Cuba según tu '
-    'presupuesto, el uso que le vas a dar y lo que más te importa.</div>'
-    '</div>',
-    unsafe_allow_html=True,
-)
-
-tab_recomendador, tab_mercado, tab_metodologia = st.tabs(
-    ["Recomendador", "Entiende el Mercado", "Metodología"]
-)
-
-
-def vista_importadoras():
-    with st.container(border=True):
-        with st.form("form_recomendador", border=False):
-            col_izq, col_der = st.columns(2)
-            with col_izq:
-                presupuesto = st.number_input(
-                    "Presupuesto máximo (USD)", min_value=0, value=4000, step=100
-                )
-                uso = st.radio("¿Para qué lo vas a usar?", ["Pasajeros", "Carga"], horizontal=True)
-            with col_der:
-                tipo = st.selectbox(
-                    "Tipo de motor", ["Me da igual", "Eléctrico", "Combustible", "Híbrido"]
-                )
-                prioridad = st.radio(
-                    "¿Qué te importa más?", ["Precio", "Autonomía", "Capacidad"], horizontal=True
-                )
-            solo_en_stock = st.checkbox("Mostrar solo los que están en stock")
-            enviado = st.form_submit_button("Buscar triciclos", type="primary", width="stretch")
-
-    if enviado:
-        st.session_state["resultados"] = recomendar_triciclo(
-            presupuesto, uso, tipo, prioridad, solo_en_stock, catalogo=catalogo
-        )
-        st.session_state["busqueda_realizada"] = True
-        st.session_state["criterios"] = {
-            "presupuesto": presupuesto,
-            "uso": uso,
-            "tipo": tipo,
-            "prioridad": prioridad,
-            "solo_en_stock": solo_en_stock,
-        }
-
-    if not st.session_state.get("busqueda_realizada"):
-        st.info("Elige tus criterios y pulsa **Buscar triciclos** para ver hasta 3 opciones.")
-    else:
-        criterios = st.session_state.get("criterios", {})
-        st.subheader("Tus mejores opciones")
-        st.caption(
-            f"Hasta ${criterios.get('presupuesto', 0):,.0f} USD, para "
-            f"{criterios.get('uso', '').lower()}, motor: {criterios.get('tipo', '').lower()}, "
-            f"prioridad: {criterios.get('prioridad', '').lower()}"
-            f"{', solo en stock' if criterios.get('solo_en_stock') else ''}."
-        )
-
-        if criterios.get("prioridad") == "Autonomía":
-            con_dato = int(catalogo["autonomia_km"].notna().sum())
-            st.warning(
-                f"La autonomía solo está registrada en {con_dato} de {len(catalogo)} modelos. "
-                "Los modelos sin ese dato aparecen al final de la lista."
+        if enviado:
+            sa2.event("busqueda_realizada")
+	    st.session_state["resultados"] = recomendar_triciclo(
+                presupuesto, uso, tipo, prioridad, solo_en_stock, catalogo=catalogo
             )
+            st.session_state["busqueda_realizada"] = True
+            st.session_state["criterios"] = {
+                "presupuesto": presupuesto,
+                "uso": uso,
+                "tipo": tipo,
+                "prioridad": prioridad,
+                "solo_en_stock": solo_en_stock,
+            }
 
-        resultados = st.session_state.get("resultados")
-        if resultados is None or resultados.empty:
-            st.warning(
-                "No hay triciclos con esos criterios. Sube el presupuesto, "
-                "cambia el tipo de motor o quita el filtro de stock."
-            )
+        if not st.session_state.get("busqueda_realizada"):
+            st.info("Elige tus criterios y pulsa **Buscar triciclos** para ver hasta 3 opciones.")
         else:
-            for i, (_, fila) in enumerate(resultados.iterrows()):
-                st.markdown(tarjeta_html(fila, destacada=(i == 0)), unsafe_allow_html=True)
-                url = fila.get("url")
-                if isinstance(url, str) and url.startswith("http"):
-                    st.link_button("Ver ficha del modelo", url)
-                st.write("")
-
-            fechas = pd.to_datetime(resultados["fecha_scraping"], errors="coerce").dropna()
-            if not fechas.empty:
-                st.caption(f"Datos del catálogo al {fechas.max():%d/%m/%Y}. Los precios pueden cambiar.")
-
-
-def tarjeta_revolico_html(fila, destacada):
-    marca = escape(str(fila["marca_detectada"])) if pd.notna(fila["marca_detectada"]) else "Marca no indicada"
-    tipo = etiqueta(fila["tipo_triciclo"])
-    uso = etiqueta(fila["tipo_uso"])
-    lugar = ", ".join(
-        escape(str(v)) for v in (fila["municipio"], fila["ubicacion"]) if pd.notna(v)
-    ) or "Ubicación no indicada"
-
-    chips = []
-    if tipo:
-        chips.append(f'<span class="chip">{escape(tipo)}</span>')
-    if uso:
-        chips.append(f'<span class="chip">Uso: {escape(uso.lower())}</span>')
-
-    precio = "Precio no disponible" if pd.isna(fila["precio_publicado"]) else f"${fila['precio_publicado']:,.0f}"
-    badge = '<div class="badge">Mejor opción para tu prioridad</div>' if destacada else ""
-    clase_tarjeta = "card card-top" if destacada else "card"
-    if pd.isna(fila["fecha_publicacion"]):
-        fecha = '<b class="nd">No indicada</b>'
-    else:
-        fecha = f"<b>{fila['fecha_publicacion']:%d/%m/%Y}</b>"
-
-    return (
-        f'<div class="{clase_tarjeta}">{badge}'
-        f'<div class="card-head"><div>'
-        f'<div class="card-title">{marca}</div>'
-        f'<div class="card-sub">{lugar}</div></div>'
-        f'<div class="card-price">{precio}</div></div>'
-        f'<div class="chips">{"".join(chips)}</div>'
-        f'<div class="specs">'
-        f'<div><span>Autonomía</span>{dato(fila["autonomia_km"], "{:,.0f} km")}</div>'
-        f'<div><span>Batería</span>{dato(fila["voltaje_bateria"], "{:,.0f} V")}</div>'
-        f'<div><span>Publicado</span>{fecha}</div>'
-        f'</div></div>'
-    )
-
-
-def vista_revolico():
-    try:
-        anuncios = obtener_anuncios()
-    except FileNotFoundError:
-        st.error("No se encontró el archivo de anuncios de Revolico en data/processed/.")
-        return
-
-    st.caption(
-        "Anuncios de vendedores en Revolico. El precio y la disponibilidad "
-        "los fija cada vendedor: confirma todo antes de comprar."
-    )
-    provincias = ["Cualquiera"] + sorted(anuncios["ubicacion"].dropna().unique())
-
-    with st.container(border=True):
-        with st.form("form_revolico", border=False):
-            col_izq, col_der = st.columns(2)
-            with col_izq:
-                presupuesto = st.number_input(
-                    "Presupuesto máximo (USD)", min_value=0, value=4000, step=100, key="presupuesto_rev"
-                )
-                uso = st.radio(
-                    "¿Para qué lo vas a usar?", ["Pasajeros", "Carga"], horizontal=True, key="uso_rev"
-                )
-            with col_der:
-                tipo = st.selectbox(
-                    "Tipo de motor", ["Me da igual", "Eléctrico", "Híbrido"], key="tipo_rev"
-                )
-                provincia = st.selectbox("Provincia", provincias, key="provincia_rev")
-            prioridad = st.radio(
-                "¿Qué te importa más?",
-                ["Precio", "Autonomía", "Más recientes"],
-                horizontal=True,
-                key="prioridad_rev",
+            criterios = st.session_state.get("criterios", {})
+            st.subheader("Tus mejores opciones")
+            st.caption(
+                f"Hasta ${criterios.get('presupuesto', 0):,.0f} USD, para "
+                f"{criterios.get('uso', '').lower()}, motor: {criterios.get('tipo', '').lower()}, "
+                f"prioridad: {criterios.get('prioridad', '').lower()}"
+                f"{', solo en stock' if criterios.get('solo_en_stock') else ''}."
             )
-            enviado = st.form_submit_button("Buscar anuncios", type="primary", width="stretch")
 
-    if enviado:
-        st.session_state["resultados_rev"] = recomendar_anuncios(
-            anuncios, presupuesto, uso, tipo, provincia, prioridad
+            if criterios.get("prioridad") == "Autonomía":
+                con_dato = int(catalogo["autonomia_km"].notna().sum())
+                st.warning(
+                    f"La autonomía solo está registrada en {con_dato} de {len(catalogo)} modelos. "
+                    "Los modelos sin ese dato aparecen al final de la lista."
+                )
+
+            resultados = st.session_state.get("resultados")
+            if resultados is None or resultados.empty:
+                st.warning(
+                    "No hay triciclos con esos criterios. Sube el presupuesto, "
+                    "cambia el tipo de motor o quita el filtro de stock."
+                )
+            else:
+                for i, (_, fila) in enumerate(resultados.iterrows()):
+                    st.markdown(tarjeta_html(fila, destacada=(i == 0)), unsafe_allow_html=True)
+                    url = fila.get("url")
+                    if isinstance(url, str) and url.startswith("http"):
+                        st.link_button("Ver ficha del modelo", url)
+                    st.write("")
+
+                fechas = pd.to_datetime(resultados["fecha_scraping"], errors="coerce").dropna()
+                if not fechas.empty:
+                    st.caption(f"Datos del catálogo al {fechas.max():%d/%m/%Y}. Los precios pueden cambiar.")
+
+
+    def tarjeta_revolico_html(fila, destacada):
+        marca = escape(str(fila["marca_detectada"])) if pd.notna(fila["marca_detectada"]) else "Marca no indicada"
+        tipo = etiqueta(fila["tipo_triciclo"])
+        uso = etiqueta(fila["tipo_uso"])
+        lugar = ", ".join(
+            escape(str(v)) for v in (fila["municipio"], fila["ubicacion"]) if pd.notna(v)
+        ) or "Ubicación no indicada"
+
+        chips = []
+        if tipo:
+            chips.append(f'<span class="chip">{escape(tipo)}</span>')
+        if uso:
+            chips.append(f'<span class="chip">Uso: {escape(uso.lower())}</span>')
+
+        precio = "Precio no disponible" if pd.isna(fila["precio_publicado"]) else f"${fila['precio_publicado']:,.0f}"
+        badge = '<div class="badge">Mejor opción para tu prioridad</div>' if destacada else ""
+        clase_tarjeta = "card card-top" if destacada else "card"
+        if pd.isna(fila["fecha_publicacion"]):
+            fecha = '<b class="nd">No indicada</b>'
+        else:
+            fecha = f"<b>{fila['fecha_publicacion']:%d/%m/%Y}</b>"
+
+        return (
+            f'<div class="{clase_tarjeta}">{badge}'
+            f'<div class="card-head"><div>'
+            f'<div class="card-title">{marca}</div>'
+            f'<div class="card-sub">{lugar}</div></div>'
+            f'<div class="card-price">{precio}</div></div>'
+            f'<div class="chips">{"".join(chips)}</div>'
+            f'<div class="specs">'
+            f'<div><span>Autonomía</span>{dato(fila["autonomia_km"], "{:,.0f} km")}</div>'
+            f'<div><span>Batería</span>{dato(fila["voltaje_bateria"], "{:,.0f} V")}</div>'
+            f'<div><span>Publicado</span>{fecha}</div>'
+            f'</div></div>'
         )
-        st.session_state["criterios_rev"] = {
-            "presupuesto": presupuesto, "uso": uso, "tipo": tipo,
-            "provincia": provincia, "prioridad": prioridad,
-        }
 
-    criterios = st.session_state.get("criterios_rev")
-    if criterios is None:
-        st.info("Elige tus criterios y pulsa **Buscar anuncios** para ver hasta 5 opciones.")
-        return
 
-    resultados, total = st.session_state["resultados_rev"]
-    st.subheader("Anuncios que coinciden")
-    st.caption(
-        f"Hasta ${criterios['presupuesto']:,.0f} USD, para {criterios['uso'].lower()}, "
-        f"motor: {criterios['tipo'].lower()}, provincia: {criterios['provincia'].lower()}, "
-        f"prioridad: {criterios['prioridad'].lower()}."
-    )
+    def vista_revolico():
+        try:
+            anuncios = obtener_anuncios()
+        except FileNotFoundError:
+            st.error("No se encontró el archivo de anuncios de Revolico en data/processed/.")
+            return
 
-    if criterios["prioridad"] == "Autonomía":
-        con_dato = int(anuncios["autonomia_km"].notna().sum())
-        st.warning(
-            f"Solo {con_dato} de {len(anuncios)} anuncios indican la autonomía. "
-            "Los que no la indican aparecen al final."
+        st.caption(
+            "Anuncios de vendedores en Revolico. El precio y la disponibilidad "
+            "los fija cada vendedor: confirma todo antes de comprar."
+        )
+        provincias = ["Cualquiera"] + sorted(anuncios["ubicacion"].dropna().unique())
+
+        with st.container(border=True):
+            with st.form("form_revolico", border=False):
+                col_izq, col_der = st.columns(2)
+                with col_izq:
+                    presupuesto = st.number_input(
+                        "Presupuesto máximo (USD)", min_value=0, value=4000, step=100, key="presupuesto_rev"
+                    )
+                    uso = st.radio(
+                        "¿Para qué lo vas a usar?", ["Pasajeros", "Carga"], horizontal=True, key="uso_rev"
+                    )
+                with col_der:
+                    tipo = st.selectbox(
+                        "Tipo de motor", ["Me da igual", "Eléctrico", "Híbrido"], key="tipo_rev"
+                    )
+                    provincia = st.selectbox("Provincia", provincias, key="provincia_rev")
+                prioridad = st.radio(
+                    "¿Qué te importa más?",
+                    ["Precio", "Autonomía", "Más recientes"],
+                    horizontal=True,
+                    key="prioridad_rev",
+                )
+                enviado = st.form_submit_button("Buscar anuncios", type="primary", width="stretch")
+
+        if enviado:
+            st.session_state["resultados_rev"] = recomendar_anuncios(
+                anuncios, presupuesto, uso, tipo, provincia, prioridad
+            )
+            st.session_state["criterios_rev"] = {
+                "presupuesto": presupuesto, "uso": uso, "tipo": tipo,
+                "provincia": provincia, "prioridad": prioridad,
+            }
+
+        criterios = st.session_state.get("criterios_rev")
+        if criterios is None:
+            st.info("Elige tus criterios y pulsa **Buscar anuncios** para ver hasta 5 opciones.")
+            return
+
+        resultados, total = st.session_state["resultados_rev"]
+        st.subheader("Anuncios que coinciden")
+        st.caption(
+            f"Hasta ${criterios['presupuesto']:,.0f} USD, para {criterios['uso'].lower()}, "
+            f"motor: {criterios['tipo'].lower()}, provincia: {criterios['provincia'].lower()}, "
+            f"prioridad: {criterios['prioridad'].lower()}."
         )
 
-    if resultados.empty:
-        st.warning(
-            "No hay anuncios con esos criterios. Sube el presupuesto, "
-            "cambia el tipo de motor o elige otra provincia."
+        if criterios["prioridad"] == "Autonomía":
+            con_dato = int(anuncios["autonomia_km"].notna().sum())
+            st.warning(
+                f"Solo {con_dato} de {len(anuncios)} anuncios indican la autonomía. "
+                "Los que no la indican aparecen al final."
+            )
+
+        if resultados.empty:
+            st.warning(
+                "No hay anuncios con esos criterios. Sube el presupuesto, "
+                "cambia el tipo de motor o elige otra provincia."
+            )
+            return
+
+        st.caption(f"Mostrando {len(resultados)} de {total} anuncios que cumplen los filtros.")
+        for i, (_, fila) in enumerate(resultados.iterrows()):
+            st.markdown(tarjeta_revolico_html(fila, destacada=(i == 0)), unsafe_allow_html=True)
+            enlace = fila.get("enlace")
+            if isinstance(enlace, str) and enlace.startswith("http"):
+                st.link_button("Ver anuncio en Revolico", enlace)
+            st.write("")
+
+
+    with tab_recomendador:
+        fuente = st.radio(
+            "¿Dónde quieres buscar?", ["Importadoras", "Revolico"], horizontal=True, key="fuente"
         )
-        return
+        if fuente == "Importadoras":
+            st.caption("Catálogo de importadoras, con precio y disponibilidad.")
+            vista_importadoras()
+        else:
+            vista_revolico()
 
-    st.caption(f"Mostrando {len(resultados)} de {total} anuncios que cumplen los filtros.")
-    for i, (_, fila) in enumerate(resultados.iterrows()):
-        st.markdown(tarjeta_revolico_html(fila, destacada=(i == 0)), unsafe_allow_html=True)
-        enlace = fila.get("enlace")
-        if isinstance(enlace, str) and enlace.startswith("http"):
-            st.link_button("Ver anuncio en Revolico", enlace)
-        st.write("")
+    with tab_mercado:
+        st.markdown(
+            "Resumen de la oferta de las importadoras y análisis del mercado informal. "
+            "Explora los hallazgos clave del estudio divididos en tres grandes bloques."
+        )
 
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Modelos en el catálogo", len(catalogo))
+        m2.metric("Importadoras", catalogo["nombre_importadora"].nunique())
+        m3.metric("Anuncios analizados", ANUNCIOS_ANALIZADOS)
+        m4.metric("Respuestas de encuesta", RESPUESTAS_ENCUESTA)
 
-with tab_recomendador:
-    fuente = st.radio(
-        "¿Dónde quieres buscar?", ["Importadoras", "Revolico"], horizontal=True, key="fuente"
-    )
-    if fuente == "Importadoras":
-        st.caption("Catálogo de importadoras, con precio y disponibilidad.")
-        vista_importadoras()
-    else:
-        vista_revolico()
+        st.divider()
 
-with tab_mercado:
-    st.markdown(
-        "Resumen de la oferta de las importadoras y análisis del mercado informal. "
-        "Explora los hallazgos clave del estudio divididos en tres grandes bloques."
-    )
-
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Modelos en el catálogo", len(catalogo))
-    m2.metric("Importadoras", catalogo["nombre_importadora"].nunique())
-    m3.metric("Anuncios analizados", ANUNCIOS_ANALIZADOS)
-    m4.metric("Respuestas de encuesta", RESPUESTAS_ENCUESTA)
-
-    st.divider()
-
-    # --- BLOQUE 1: PRECIOS Y TECNOLOGÍA ---
-    st.subheader("1. El Mercado y los Precios")
-    st.markdown("El mercado informal es significativamente más caro que importar directamente. Además, la tecnología eléctrica domina el catálogo formal.")
+        # --- BLOQUE 1: PRECIOS Y TECNOLOGÍA ---
+        st.subheader("1. El Mercado y los Precios")
+        st.markdown("El mercado informal es significativamente más caro que importar directamente. Además, la tecnología eléctrica domina el catálogo formal.")
     
-    col1, col2 = st.columns(2)
-    with col1:
-        st.image("docs/imagenes/grafico_01_precios.png", use_container_width=True)
-        st.caption("El mercado informal (Revolico) es 20% más caro que las importadoras.")
-    with col2:
-        st.image("docs/imagenes/grafico_08_tipos.png", use_container_width=True)
-        st.caption("El 68% de los triciclos en las importadoras son eléctricos.")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image("docs/imagenes/grafico_01_precios.png", use_container_width=True)
+            st.caption("El mercado informal (Revolico) es 20% más caro que las importadoras.")
+        with col2:
+            st.image("docs/imagenes/grafico_08_tipos.png", use_container_width=True)
+            st.caption("El 68% de los triciclos en las importadoras son eléctricos.")
 
-    st.divider()
+        st.divider()
 
-    # --- BLOQUE 2: EL DÍA A DÍA Y LA FORMALIDAD ---
-    st.subheader("2. Fallas y Formalidad Legal")
-    st.markdown("El mayor dolor de cabeza de los dueños son las gomas y la batería. A nivel legal, la mayoría opera con solo 2 documentos, lo que refleja un alto nivel de informalidad.")
+        # --- BLOQUE 2: EL DÍA A DÍA Y LA FORMALIDAD ---
+        st.subheader("2. Fallas y Formalidad Legal")
+        st.markdown("El mayor dolor de cabeza de los dueños son las gomas y la batería. A nivel legal, la mayoría opera con solo 2 documentos, lo que refleja un alto nivel de informalidad.")
     
-    col3, col4, col5 = st.columns(3)
-    with col3:
-        st.image("docs/imagenes/grafico_02_fallas.png", use_container_width=True)
-        st.caption("Fallas mecánicas reportadas por los 40 encuestados.")
-    with col4:
-        st.image("docs/imagenes/grafico_03_documentos.png", use_container_width=True)
-        st.caption("Cantidad de documentos legales que poseen los choferes.")
-    with col5:
-        st.image("docs/imagenes/grafico_06_clusters_imp.png", use_container_width=True)
-        st.caption("Los 3 segmentos de precios del mercado formal.")
+        col3, col4, col5 = st.columns(3)
+        with col3:
+            st.image("docs/imagenes/grafico_02_fallas.png", use_container_width=True)
+            st.caption("Fallas mecánicas reportadas por los 40 encuestados.")
+        with col4:
+            st.image("docs/imagenes/grafico_03_documentos.png", use_container_width=True)
+            st.caption("Cantidad de documentos legales que poseen los choferes.")
+        with col5:
+            st.image("docs/imagenes/grafico_06_clusters_imp.png", use_container_width=True)
+            st.caption("Los 3 segmentos de precios del mercado formal.")
 
-    st.divider()
+        st.divider()
 
-    # --- BLOQUE 3: IMPACTO Y PERFILES ---
-    st.subheader("3. Impacto Externo y Perfil del Comprador")
-    st.markdown("La competencia estatal está afectando la rentabilidad, y el análisis de Machine Learning revela que el mercado está dominado por un perfil muy claro: dueños de eléctricos con alto presupuesto.")
+        # --- BLOQUE 3: IMPACTO Y PERFILES ---
+        st.subheader("3. Impacto Externo y Perfil del Comprador")
+        st.markdown("La competencia estatal está afectando la rentabilidad, y el análisis de Machine Learning revela que el mercado está dominado por un perfil muy claro: dueños de eléctricos con alto presupuesto.")
     
-    col6, col7, col8 = st.columns(3)
-    with col6:
-        st.image("docs/imagenes/grafico_04_afectados.png", use_container_width=True)
-        st.caption("37.5% de los encuestados se siente afectado por triciclos estatales.")
-    with col7:
-        st.image("docs/imagenes/grafico_05_ganancias.png", use_container_width=True)
-        st.caption("De los afectados, el 66% reporta ganancias a la baja.")
-    with col8:
-        st.image("docs/imagenes/grafico_07_clusters_cli.png", use_container_width=True)
-        st.caption("El 89% de los compradores encuestados son propietarios de eléctricos.")
+        col6, col7, col8 = st.columns(3)
+        with col6:
+            st.image("docs/imagenes/grafico_04_afectados.png", use_container_width=True)
+            st.caption("37.5% de los encuestados se siente afectado por triciclos estatales.")
+        with col7:
+            st.image("docs/imagenes/grafico_05_ganancias.png", use_container_width=True)
+            st.caption("De los afectados, el 66% reporta ganancias a la baja.")
+        with col8:
+            st.image("docs/imagenes/grafico_07_clusters_cli.png", use_container_width=True)
+            st.caption("El 89% de los compradores encuestados son propietarios de eléctricos.")
 
-with tab_metodologia:
-    st.markdown(
-        """
-### 1. Web Scraping y Recolección de Datos
-Los datos de Revolico se extrajeron de la subcategoría de Motos Eléctricas y Triciclos mediante un script en Python (BeautifulSoup). Se recorrieron las páginas 1 a 90 (de un total de 253), obteniendo 1,378 anuncios únicos. 
-Tras aplicar los filtros de calidad y unificar marcas, quedaron **769 anuncios aceptados** y 609 descartados. Después de eliminar duplicados, el conjunto final quedó en **757 anuncios**. 
-Por otro lado, el catálogo de importadoras reúne **32 modelos** de MZ Products, Kikihabana y Nihao53, extraídos con técnicas similares.
+    with tab_metodologia:
+        st.markdown(
+            """
+    ### 1. Web Scraping y Recolección de Datos
+    Los datos de Revolico se extrajeron de la subcategoría de Motos Eléctricas y Triciclos mediante un script en Python (BeautifulSoup). Se recorrieron las páginas 1 a 90 (de un total de 253), obteniendo 1,378 anuncios únicos. 
+    Tras aplicar los filtros de calidad y unificar marcas, quedaron **769 anuncios aceptados** y 609 descartados. Después de eliminar duplicados, el conjunto final quedó en **757 anuncios**. 
+    Por otro lado, el catálogo de importadoras reúne **32 modelos** de MZ Products, Kikihabana y Nihao53, extraídos con técnicas similares.
 
-### 2. Modelado con KMeans
-Se aplicó el algoritmo de clustering KMeans para segmentar el mercado y entender la oferta y la demanda:
-*   **En importadoras (k=3):** Se identificaron 3 segmentos de producto: Combustión Premium, Eléctricos de Carga Media e Híbridos Económicos.
-*   **En encuestas (k=2):** Se identificaron 2 perfiles de compradores: Propietarios eléctricos con alto presupuesto y Dueños de híbridos con perfil mixto.
+    ### 2. Modelado con KMeans
+    Se aplicó el algoritmo de clustering KMeans para segmentar el mercado y entender la oferta y la demanda:
+    *   **En importadoras (k=3):** Se identificaron 3 segmentos de producto: Combustión Premium, Eléctricos de Carga Media e Híbridos Económicos.
+    *   **En encuestas (k=2):** Se identificaron 2 perfiles de compradores: Propietarios eléctricos con alto presupuesto y Dueños de híbridos con perfil mixto.
 
-### 3. Limitaciones del Estudio
-Para garantizar la transparencia, se declaran las siguientes limitaciones:
-*   El scraping cubre 90 de las 253 páginas de la categoría (muestra no exhaustiva).
-*   La autonomía solo está disponible en 4 de los 32 modelos del catálogo formal.
-*   La capacidad de carga falta en 10 de los 32 modelos formales.
-*   La encuesta cuenta con 40 respuestas válidas, por lo que funciona como una fotografía representativa del mercado, pero no como un censo nacional.
-*   Los precios de Revolico son de oferta y pueden variar al momento del cierre de la compra.
-"""
-    )
+    ### 3. Limitaciones del Estudio
+    Para garantizar la transparencia, se declaran las siguientes limitaciones:
+    *   El scraping cubre 90 de las 253 páginas de la categoría (muestra no exhaustiva).
+    *   La autonomía solo está disponible en 4 de los 32 modelos del catálogo formal.
+    *   La capacidad de carga falta en 10 de los 32 modelos formales.
+    *   La encuesta cuenta con 40 respuestas válidas, por lo que funciona como una fotografía representativa del mercado, pero no como un censo nacional.
+    *   Los precios de Revolico son de oferta y pueden variar al momento del cierre de la compra.
+    """
+        )
