@@ -195,7 +195,7 @@ with sa2.track(save_to_json="analytics.json"):
 
         if enviado:
             sa2.event("busqueda_realizada")
-	    st.session_state["resultados"] = recomendar_triciclo(
+        st.session_state["resultados"] = recomendar_triciclo(
                 presupuesto, uso, tipo, prioridad, solo_en_stock, catalogo=catalogo
             )
             st.session_state["busqueda_realizada"] = True
