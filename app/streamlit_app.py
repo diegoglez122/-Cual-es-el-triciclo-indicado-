@@ -194,17 +194,25 @@ with sa2.track(save_to_json="analytics.json"):
                 enviado = st.form_submit_button("Buscar triciclos", type="primary", width="stretch")
 
         if enviado:
-            sa2.event("busqueda_realizada")
+        sa2.event("busqueda_realizada")
+
         st.session_state["resultados"] = recomendar_triciclo(
                 presupuesto, uso, tipo, prioridad, solo_en_stock, catalogo=catalogo
             )
-            st.session_state["busqueda_realizada"] = True
-            st.session_state["criterios"] = {
-                "presupuesto": presupuesto,
-                "uso": uso,
-                "tipo": tipo,
-                "prioridad": prioridad,
-                "solo_en_stock": solo_en_stock,
+        st.session_state["busqueda_realizada"] = True
+
+        st.session_state["criterios"] = {
+
+            "presupuesto": presupuesto,
+
+            "uso": uso,
+
+            "tipo": tipo,
+
+            "prioridad": prioridad,
+
+            "solo_en_stock": solo_en_stock,
+
             }
 
         if not st.session_state.get("busqueda_realizada"):
@@ -323,8 +331,10 @@ with sa2.track(save_to_json="analytics.json"):
                 anuncios, presupuesto, uso, tipo, provincia, prioridad
             )
             st.session_state["criterios_rev"] = {
-                "presupuesto": presupuesto, "uso": uso, "tipo": tipo,
-                "provincia": provincia, "prioridad": prioridad,
+            "presupuesto": presupuesto, "uso": uso, "tipo": tipo,
+
+            "provincia": provincia, "prioridad": prioridad,
+
             }
 
         criterios = st.session_state.get("criterios_rev")
