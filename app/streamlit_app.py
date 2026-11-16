@@ -25,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-with sa2.track(events_path="analytics.json"):
+with sa2.track(save_to_json="analytics.json"):
 
 
 
