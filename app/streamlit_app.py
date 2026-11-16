@@ -3,16 +3,22 @@
 from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
 from app.recommend import cargar_catalogo, recomendar_triciclo
 import sys
-from html import escape
 from pathlib import Path
+from html import escape
 
 import pandas as pd
 import streamlit as st
 import streamlit_analytics2 as sa2
 
+# 1. Primero configuramos la ruta
 RAIZ = Path(__file__).resolve().parent.parent
 if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
+
+# 2. Ahora sí, Python ya sabe dónde buscar 'app'
+from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
+from app.recommend import cargar_catalogo, recomendar_triciclo
+
 
 
 ANUNCIOS_ANALIZADOS = 757
