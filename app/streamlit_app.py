@@ -1,5 +1,7 @@
 """Interfaz web en Streamlit para el recomendador de triciclos."""
 
+from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
+from app.recommend import cargar_catalogo, recomendar_triciclo
 import sys
 from html import escape
 from pathlib import Path
@@ -12,8 +14,6 @@ RAIZ = Path(__file__).resolve().parent.parent
 if str(RAIZ) not in sys.path:
     sys.path.insert(0, str(RAIZ))
 
-from app.recommend import cargar_catalogo, recomendar_triciclo
-from app.recommend_revolico import cargar_anuncios, recomendar_anuncios
 
 ANUNCIOS_ANALIZADOS = 757
 RESPUESTAS_ENCUESTA = 40
@@ -26,8 +26,6 @@ st.set_page_config(
 )
 
 with sa2.track(save_to_json="analytics.json"):
-
-
 
     ESTILOS = """
     <style>
@@ -83,24 +81,21 @@ with sa2.track(save_to_json="analytics.json"):
     """
     st.markdown(ESTILOS, unsafe_allow_html=True)
 
-
     @st.cache_data(show_spinner=False)
     def obtener_catalogo():
         return cargar_catalogo()
-
 
     TIPOS = {
         "electrico": "Eléctrico", "eléctrico": "Eléctrico",
         "combustion": "Combustión", "combustión": "Combustión",
         "hibrido": "Híbrido", "híbrido": "Híbrido",
     }
-    DISPONIBILIDAD = {"en stock": "En stock", "desconocido": "Disponibilidad no confirmada"}
-
+    DISPONIBILIDAD = {"en stock": "En stock",
+                      "desconocido": "Disponibilidad no confirmada"}
 
     @st.cache_data(show_spinner=False)
     def obtener_anuncios():
         return cargar_anuncios()
-
 
     def etiqueta(valor):
         if pd.isna(valor):
@@ -113,34 +108,36 @@ with sa2.track(save_to_json="analytics.json"):
             return DISPONIBILIDAD[clave]
         return texto.capitalize() if texto.islower() else texto
 
-
     def dato(valor, formato):
         if pd.isna(valor):
             return '<b class="nd">No disponible</b>'
         return f"<b>{formato.format(valor)}</b>"
 
-
     def es_verdadero(valor):
         return str(valor).strip().lower() in {"true", "1", "si", "sí", "yes"}
 
-
     def tarjeta_html(fila, destacada):
-        modelo = escape(str(fila["modelo"])) if pd.notna(fila["modelo"]) else "Modelo sin nombre"
+        modelo = escape(str(fila["modelo"])) if pd.notna(
+            fila["modelo"]) else "Modelo sin nombre"
         importadora = escape(etiqueta(fila["nombre_importadora"]))
         marca = escape(str(fila["marca"])) if pd.notna(fila["marca"]) else ""
         subtitulo = importadora if not marca or marca == importadora else f"{importadora}, marca {marca}"
 
         chips = []
         if pd.notna(fila["tipo"]):
-            chips.append(f'<span class="chip">{escape(etiqueta(fila["tipo"]))}</span>')
+            chips.append(
+                f'<span class="chip">{escape(etiqueta(fila["tipo"]))}</span>')
         if pd.notna(fila["disponibilidad"]):
-            en_stock = str(fila["disponibilidad"]).strip().lower() in {"en stock", "in stock", "en_stock"}
+            en_stock = str(fila["disponibilidad"]).strip().lower() in {
+                "en stock", "in stock", "en_stock"}
             clase = "chip" if en_stock else "chip chip-warn"
-            chips.append(f'<span class="{clase}">{escape(etiqueta(fila["disponibilidad"]))}</span>')
+            chips.append(
+                f'<span class="{clase}">{escape(etiqueta(fila["disponibilidad"]))}</span>')
         if es_verdadero(fila["tiene_panel_solar"]):
             chips.append('<span class="chip">Panel solar</span>')
 
-        precio = "Precio no disponible" if pd.isna(fila["precio_usd"]) else f"${fila['precio_usd']:,.0f}"
+        precio = "Precio no disponible" if pd.isna(
+            fila["precio_usd"]) else f"${fila['precio_usd']:,.0f}"
         badge = '<div class="badge">Mejor opción para tu prioridad</div>' if destacada else ""
         clase_tarjeta = "card card-top" if destacada else "card"
 
@@ -154,9 +151,7 @@ with sa2.track(save_to_json="analytics.json"):
             f'<div class="specs">'
             f'<div><span>Capacidad de carga</span>{dato(fila["capacidad_carga_kg"], "{:,.0f} kg")}</div>'
             f'<div><span>Autonomía</span>{dato(fila["autonomia_km"], "{:,.0f} km")}</div>'
-            f'</div></div>'
-        )
-
+            f'</div></div>')
 
     catalogo = obtener_catalogo()
 
@@ -165,14 +160,11 @@ with sa2.track(save_to_json="analytics.json"):
         '<div class="hero-title">Triciclos Cuba</div>'
         '<div class="hero-text">Compara triciclos de importadoras en Cuba según tu '
         'presupuesto, el uso que le vas a dar y lo que más te importa.</div>'
-        '</div>',
-        unsafe_allow_html=True,
-    )
+        '</div>', unsafe_allow_html=True, )
 
     tab_recomendador, tab_mercado, tab_metodologia = st.tabs(
         ["Recomendador", "Entiende el Mercado", "Metodología"]
     )
-
 
     def vista_importadoras():
         with st.container(border=True):
@@ -180,25 +172,28 @@ with sa2.track(save_to_json="analytics.json"):
                 col_izq, col_der = st.columns(2)
                 with col_izq:
                     presupuesto = st.number_input(
-                        "Presupuesto máximo (USD)", min_value=0, value=4000, step=100
-                    )
-                    uso = st.radio("¿Para qué lo vas a usar?", ["Pasajeros", "Carga"], horizontal=True)
+                        "Presupuesto máximo (USD)", min_value=0, value=4000, step=100)
+                    uso = st.radio(
+                        "¿Para qué lo vas a usar?", [
+                            "Pasajeros", "Carga"], horizontal=True)
                 with col_der:
                     tipo = st.selectbox(
-                        "Tipo de motor", ["Me da igual", "Eléctrico", "Combustible", "Híbrido"]
-                    )
+                        "Tipo de motor", [
+                            "Me da igual", "Eléctrico", "Combustible", "Híbrido"])
                     prioridad = st.radio(
-                        "¿Qué te importa más?", ["Precio", "Autonomía", "Capacidad"], horizontal=True
-                    )
-                solo_en_stock = st.checkbox("Mostrar solo los que están en stock")
-                enviado = st.form_submit_button("Buscar triciclos", type="primary", width="stretch")
+                        "¿Qué te importa más?", [
+                            "Precio", "Autonomía", "Capacidad"], horizontal=True)
+                solo_en_stock = st.checkbox(
+                    "Mostrar solo los que están en stock")
+                enviado = st.form_submit_button(
+                    "Buscar triciclos", type="primary", width="stretch")
 
         if enviado:
         sa2.event("busqueda_realizada")
 
         st.session_state["resultados"] = recomendar_triciclo(
-                presupuesto, uso, tipo, prioridad, solo_en_stock, catalogo=catalogo
-            )
+            presupuesto, uso, tipo, prioridad, solo_en_stock, catalogo=catalogo
+        )
         st.session_state["busqueda_realizada"] = True
 
         st.session_state["criterios"] = {
@@ -213,10 +208,11 @@ with sa2.track(save_to_json="analytics.json"):
 
             "solo_en_stock": solo_en_stock,
 
-            }
+        }
 
         if not st.session_state.get("busqueda_realizada"):
-            st.info("Elige tus criterios y pulsa **Buscar triciclos** para ver hasta 3 opciones.")
+            st.info(
+                "Elige tus criterios y pulsa **Buscar triciclos** para ver hasta 3 opciones.")
         else:
             criterios = st.session_state.get("criterios", {})
             st.subheader("Tus mejores opciones")
@@ -224,50 +220,59 @@ with sa2.track(save_to_json="analytics.json"):
                 f"Hasta ${criterios.get('presupuesto', 0):,.0f} USD, para "
                 f"{criterios.get('uso', '').lower()}, motor: {criterios.get('tipo', '').lower()}, "
                 f"prioridad: {criterios.get('prioridad', '').lower()}"
-                f"{', solo en stock' if criterios.get('solo_en_stock') else ''}."
-            )
+                f"{', solo en stock' if criterios.get('solo_en_stock') else ''}.")
 
             if criterios.get("prioridad") == "Autonomía":
                 con_dato = int(catalogo["autonomia_km"].notna().sum())
                 st.warning(
                     f"La autonomía solo está registrada en {con_dato} de {len(catalogo)} modelos. "
-                    "Los modelos sin ese dato aparecen al final de la lista."
-                )
+                    "Los modelos sin ese dato aparecen al final de la lista.")
 
             resultados = st.session_state.get("resultados")
             if resultados is None or resultados.empty:
                 st.warning(
                     "No hay triciclos con esos criterios. Sube el presupuesto, "
-                    "cambia el tipo de motor o quita el filtro de stock."
-                )
+                    "cambia el tipo de motor o quita el filtro de stock.")
             else:
                 for i, (_, fila) in enumerate(resultados.iterrows()):
-                    st.markdown(tarjeta_html(fila, destacada=(i == 0)), unsafe_allow_html=True)
+                    st.markdown(
+                        tarjeta_html(
+                            fila,
+                            destacada=(
+                                i == 0)),
+                        unsafe_allow_html=True)
                     url = fila.get("url")
                     if isinstance(url, str) and url.startswith("http"):
                         st.link_button("Ver ficha del modelo", url)
                     st.write("")
 
-                fechas = pd.to_datetime(resultados["fecha_scraping"], errors="coerce").dropna()
+                fechas = pd.to_datetime(
+                    resultados["fecha_scraping"],
+                    errors="coerce").dropna()
                 if not fechas.empty:
-                    st.caption(f"Datos del catálogo al {fechas.max():%d/%m/%Y}. Los precios pueden cambiar.")
-
+                    st.caption(
+                        f"Datos del catálogo al {fechas.max():%d/%m/%Y}. Los precios pueden cambiar.")
 
     def tarjeta_revolico_html(fila, destacada):
-        marca = escape(str(fila["marca_detectada"])) if pd.notna(fila["marca_detectada"]) else "Marca no indicada"
+        marca = escape(str(fila["marca_detectada"])) if pd.notna(
+            fila["marca_detectada"]) else "Marca no indicada"
         tipo = etiqueta(fila["tipo_triciclo"])
         uso = etiqueta(fila["tipo_uso"])
         lugar = ", ".join(
-            escape(str(v)) for v in (fila["municipio"], fila["ubicacion"]) if pd.notna(v)
-        ) or "Ubicación no indicada"
+            escape(
+                str(v)) for v in (
+                fila["municipio"],
+                fila["ubicacion"]) if pd.notna(v)) or "Ubicación no indicada"
 
         chips = []
         if tipo:
             chips.append(f'<span class="chip">{escape(tipo)}</span>')
         if uso:
-            chips.append(f'<span class="chip">Uso: {escape(uso.lower())}</span>')
+            chips.append(
+                f'<span class="chip">Uso: {escape(uso.lower())}</span>')
 
-        precio = "Precio no disponible" if pd.isna(fila["precio_publicado"]) else f"${fila['precio_publicado']:,.0f}"
+        precio = "Precio no disponible" if pd.isna(
+            fila["precio_publicado"]) else f"${fila['precio_publicado']:,.0f}"
         badge = '<div class="badge">Mejor opción para tu prioridad</div>' if destacada else ""
         clase_tarjeta = "card card-top" if destacada else "card"
         if pd.isna(fila["fecha_publicacion"]):
@@ -286,60 +291,65 @@ with sa2.track(save_to_json="analytics.json"):
             f'<div><span>Autonomía</span>{dato(fila["autonomia_km"], "{:,.0f} km")}</div>'
             f'<div><span>Batería</span>{dato(fila["voltaje_bateria"], "{:,.0f} V")}</div>'
             f'<div><span>Publicado</span>{fecha}</div>'
-            f'</div></div>'
-        )
-
+            f'</div></div>')
 
     def vista_revolico():
         try:
             anuncios = obtener_anuncios()
         except FileNotFoundError:
-            st.error("No se encontró el archivo de anuncios de Revolico en data/processed/.")
+            st.error(
+                "No se encontró el archivo de anuncios de Revolico en data/processed/.")
             return
 
         st.caption(
             "Anuncios de vendedores en Revolico. El precio y la disponibilidad "
-            "los fija cada vendedor: confirma todo antes de comprar."
-        )
-        provincias = ["Cualquiera"] + sorted(anuncios["ubicacion"].dropna().unique())
+            "los fija cada vendedor: confirma todo antes de comprar.")
+        provincias = ["Cualquiera"] + \
+            sorted(anuncios["ubicacion"].dropna().unique())
 
         with st.container(border=True):
             with st.form("form_revolico", border=False):
                 col_izq, col_der = st.columns(2)
                 with col_izq:
                     presupuesto = st.number_input(
-                        "Presupuesto máximo (USD)", min_value=0, value=4000, step=100, key="presupuesto_rev"
-                    )
+                        "Presupuesto máximo (USD)",
+                        min_value=0,
+                        value=4000,
+                        step=100,
+                        key="presupuesto_rev")
                     uso = st.radio(
-                        "¿Para qué lo vas a usar?", ["Pasajeros", "Carga"], horizontal=True, key="uso_rev"
-                    )
+                        "¿Para qué lo vas a usar?", [
+                            "Pasajeros", "Carga"], horizontal=True, key="uso_rev")
                 with col_der:
                     tipo = st.selectbox(
-                        "Tipo de motor", ["Me da igual", "Eléctrico", "Híbrido"], key="tipo_rev"
-                    )
-                    provincia = st.selectbox("Provincia", provincias, key="provincia_rev")
+                        "Tipo de motor", [
+                            "Me da igual", "Eléctrico", "Híbrido"], key="tipo_rev")
+                    provincia = st.selectbox(
+                        "Provincia", provincias, key="provincia_rev")
                 prioridad = st.radio(
                     "¿Qué te importa más?",
                     ["Precio", "Autonomía", "Más recientes"],
                     horizontal=True,
                     key="prioridad_rev",
                 )
-                enviado = st.form_submit_button("Buscar anuncios", type="primary", width="stretch")
+                enviado = st.form_submit_button(
+                    "Buscar anuncios", type="primary", width="stretch")
 
         if enviado:
             st.session_state["resultados_rev"] = recomendar_anuncios(
                 anuncios, presupuesto, uso, tipo, provincia, prioridad
             )
             st.session_state["criterios_rev"] = {
-            "presupuesto": presupuesto, "uso": uso, "tipo": tipo,
+                "presupuesto": presupuesto, "uso": uso, "tipo": tipo,
 
-            "provincia": provincia, "prioridad": prioridad,
+                "provincia": provincia, "prioridad": prioridad,
 
             }
 
         criterios = st.session_state.get("criterios_rev")
         if criterios is None:
-            st.info("Elige tus criterios y pulsa **Buscar anuncios** para ver hasta 5 opciones.")
+            st.info(
+                "Elige tus criterios y pulsa **Buscar anuncios** para ver hasta 5 opciones.")
             return
 
         resultados, total = st.session_state["resultados_rev"]
@@ -347,15 +357,13 @@ with sa2.track(save_to_json="analytics.json"):
         st.caption(
             f"Hasta ${criterios['presupuesto']:,.0f} USD, para {criterios['uso'].lower()}, "
             f"motor: {criterios['tipo'].lower()}, provincia: {criterios['provincia'].lower()}, "
-            f"prioridad: {criterios['prioridad'].lower()}."
-        )
+            f"prioridad: {criterios['prioridad'].lower()}.")
 
         if criterios["prioridad"] == "Autonomía":
             con_dato = int(anuncios["autonomia_km"].notna().sum())
             st.warning(
                 f"Solo {con_dato} de {len(anuncios)} anuncios indican la autonomía. "
-                "Los que no la indican aparecen al final."
-            )
+                "Los que no la indican aparecen al final.")
 
         if resultados.empty:
             st.warning(
@@ -364,19 +372,24 @@ with sa2.track(save_to_json="analytics.json"):
             )
             return
 
-        st.caption(f"Mostrando {len(resultados)} de {total} anuncios que cumplen los filtros.")
+        st.caption(
+            f"Mostrando {len(resultados)} de {total} anuncios que cumplen los filtros.")
         for i, (_, fila) in enumerate(resultados.iterrows()):
-            st.markdown(tarjeta_revolico_html(fila, destacada=(i == 0)), unsafe_allow_html=True)
+            st.markdown(
+                tarjeta_revolico_html(
+                    fila,
+                    destacada=(
+                        i == 0)),
+                unsafe_allow_html=True)
             enlace = fila.get("enlace")
             if isinstance(enlace, str) and enlace.startswith("http"):
                 st.link_button("Ver anuncio en Revolico", enlace)
             st.write("")
 
-
     with tab_recomendador:
         fuente = st.radio(
-            "¿Dónde quieres buscar?", ["Importadoras", "Revolico"], horizontal=True, key="fuente"
-        )
+            "¿Dónde quieres buscar?", [
+                "Importadoras", "Revolico"], horizontal=True, key="fuente")
         if fuente == "Importadoras":
             st.caption("Catálogo de importadoras, con precio y disponibilidad.")
             vista_importadoras()
@@ -386,8 +399,7 @@ with sa2.track(save_to_json="analytics.json"):
     with tab_mercado:
         st.markdown(
             "Resumen de la oferta de las importadoras y análisis del mercado informal. "
-            "Explora los hallazgos clave del estudio divididos en tres grandes bloques."
-        )
+            "Explora los hallazgos clave del estudio divididos en tres grandes bloques.")
 
         m1, m2, m3, m4 = st.columns(4)
         m1.metric("Modelos en el catálogo", len(catalogo))
@@ -400,30 +412,43 @@ with sa2.track(save_to_json="analytics.json"):
         # --- BLOQUE 1: PRECIOS Y TECNOLOGÍA ---
         st.subheader("1. El Mercado y los Precios")
         st.markdown("El mercado informal es significativamente más caro que importar directamente. Además, la tecnología eléctrica domina el catálogo formal.")
-    
+
         col1, col2 = st.columns(2)
         with col1:
-            st.image("docs/imagenes/grafico_01_precios.png", use_container_width=True)
-            st.caption("El mercado informal (Revolico) es 20% más caro que las importadoras.")
+            st.image(
+                "docs/imagenes/grafico_01_precios.png",
+                use_container_width=True)
+            st.caption(
+                "El mercado informal (Revolico) es 20% más caro que las importadoras.")
         with col2:
-            st.image("docs/imagenes/grafico_08_tipos.png", use_container_width=True)
-            st.caption("El 68% de los triciclos en las importadoras son eléctricos.")
+            st.image(
+                "docs/imagenes/grafico_08_tipos.png",
+                use_container_width=True)
+            st.caption(
+                "El 68% de los triciclos en las importadoras son eléctricos.")
 
         st.divider()
 
         # --- BLOQUE 2: EL DÍA A DÍA Y LA FORMALIDAD ---
         st.subheader("2. Fallas y Formalidad Legal")
         st.markdown("El mayor dolor de cabeza de los dueños son las gomas y la batería. A nivel legal, la mayoría opera con solo 2 documentos, lo que refleja un alto nivel de informalidad.")
-    
+
         col3, col4, col5 = st.columns(3)
         with col3:
-            st.image("docs/imagenes/grafico_02_fallas.png", use_container_width=True)
+            st.image(
+                "docs/imagenes/grafico_02_fallas.png",
+                use_container_width=True)
             st.caption("Fallas mecánicas reportadas por los 40 encuestados.")
         with col4:
-            st.image("docs/imagenes/grafico_03_documentos.png", use_container_width=True)
-            st.caption("Cantidad de documentos legales que poseen los choferes.")
+            st.image(
+                "docs/imagenes/grafico_03_documentos.png",
+                use_container_width=True)
+            st.caption(
+                "Cantidad de documentos legales que poseen los choferes.")
         with col5:
-            st.image("docs/imagenes/grafico_06_clusters_imp.png", use_container_width=True)
+            st.image(
+                "docs/imagenes/grafico_06_clusters_imp.png",
+                use_container_width=True)
             st.caption("Los 3 segmentos de precios del mercado formal.")
 
         st.divider()
@@ -431,24 +456,32 @@ with sa2.track(save_to_json="analytics.json"):
         # --- BLOQUE 3: IMPACTO Y PERFILES ---
         st.subheader("3. Impacto Externo y Perfil del Comprador")
         st.markdown("La competencia estatal está afectando la rentabilidad, y el análisis de Machine Learning revela que el mercado está dominado por un perfil muy claro: dueños de eléctricos con alto presupuesto.")
-    
+
         col6, col7, col8 = st.columns(3)
         with col6:
-            st.image("docs/imagenes/grafico_04_afectados.png", use_container_width=True)
-            st.caption("37.5% de los encuestados se siente afectado por triciclos estatales.")
+            st.image(
+                "docs/imagenes/grafico_04_afectados.png",
+                use_container_width=True)
+            st.caption(
+                "37.5% de los encuestados se siente afectado por triciclos estatales.")
         with col7:
-            st.image("docs/imagenes/grafico_05_ganancias.png", use_container_width=True)
+            st.image(
+                "docs/imagenes/grafico_05_ganancias.png",
+                use_container_width=True)
             st.caption("De los afectados, el 66% reporta ganancias a la baja.")
         with col8:
-            st.image("docs/imagenes/grafico_07_clusters_cli.png", use_container_width=True)
-            st.caption("El 89% de los compradores encuestados son propietarios de eléctricos.")
+            st.image(
+                "docs/imagenes/grafico_07_clusters_cli.png",
+                use_container_width=True)
+            st.caption(
+                "El 89% de los compradores encuestados son propietarios de eléctricos.")
 
     with tab_metodologia:
         st.markdown(
             """
     ### 1. Web Scraping y Recolección de Datos
-    Los datos de Revolico se extrajeron de la subcategoría de Motos Eléctricas y Triciclos mediante un script en Python (BeautifulSoup). Se recorrieron las páginas 1 a 90 (de un total de 253), obteniendo 1,378 anuncios únicos. 
-    Tras aplicar los filtros de calidad y unificar marcas, quedaron **769 anuncios aceptados** y 609 descartados. Después de eliminar duplicados, el conjunto final quedó en **757 anuncios**. 
+    Los datos de Revolico se extrajeron de la subcategoría de Motos Eléctricas y Triciclos mediante un script en Python (BeautifulSoup). Se recorrieron las páginas 1 a 90 (de un total de 253), obteniendo 1,378 anuncios únicos.
+    Tras aplicar los filtros de calidad y unificar marcas, quedaron **769 anuncios aceptados** y 609 descartados. Después de eliminar duplicados, el conjunto final quedó en **757 anuncios**.
     Por otro lado, el catálogo de importadoras reúne **32 modelos** de MZ Products, Kikihabana y Nihao53, extraídos con técnicas similares.
 
     ### 2. Modelado con KMeans
